@@ -15,6 +15,8 @@
 		92620555235241C700426537 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 92620553235241C700426537 /* LaunchScreen.storyboard */; };
 		92620560235241C700426537 /* ContactListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262055F235241C700426537 /* ContactListTests.swift */; };
 		9262056B235241C800426537 /* ContactListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262056A235241C800426537 /* ContactListUITests.swift */; };
+		9262058123524FD600426537 /* Colleague.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262058023524FD600426537 /* Colleague.swift */; };
+		926205832352516900426537 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926205822352516900426537 /* Friend.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		92620566235241C800426537 /* ContactListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9262056A235241C800426537 /* ContactListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListUITests.swift; sourceTree = "<group>"; };
 		9262056C235241C800426537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9262058023524FD600426537 /* Colleague.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colleague.swift; sourceTree = "<group>"; };
+		926205822352516900426537 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +160,8 @@
 		9262057B23524EC700426537 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9262058023524FD600426537 /* Colleague.swift */,
+				926205822352516900426537 /* Friend.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -317,7 +323,9 @@
 			files = (
 				9262054A235241C600426537 /* ContactsViewController.swift in Sources */,
 				92620550235241C600426537 /* ContactList.xcdatamodeld in Sources */,
+				926205832352516900426537 /* Friend.swift in Sources */,
 				92620548235241C600426537 /* AppDelegate.swift in Sources */,
+				9262058123524FD600426537 /* Colleague.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,7 +502,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4STK32K5N5;
-				INFOPLIST_FILE = ContactList/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/ContactList/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -513,7 +521,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4STK32K5N5;
-				INFOPLIST_FILE = ContactList/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/ContactList/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
