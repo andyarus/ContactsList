@@ -17,6 +17,8 @@
 		9262056B235241C800426537 /* ContactListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262056A235241C800426537 /* ContactListUITests.swift */; };
 		9262058123524FD600426537 /* Colleague.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262058023524FD600426537 /* Colleague.swift */; };
 		926205832352516900426537 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926205822352516900426537 /* Friend.swift */; };
+		9262058523525B0E00426537 /* ColleagueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262058423525B0E00426537 /* ColleagueViewModel.swift */; };
+		9262058723525B1C00426537 /* FriendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262058623525B1C00426537 /* FriendViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		9262056C235241C800426537 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9262058023524FD600426537 /* Colleague.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colleague.swift; sourceTree = "<group>"; };
 		926205822352516900426537 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
+		9262058423525B0E00426537 /* ColleagueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColleagueViewModel.swift; sourceTree = "<group>"; };
+		9262058623525B1C00426537 /* FriendViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +173,8 @@
 		9262057C23524ECF00426537 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				9262058423525B0E00426537 /* ColleagueViewModel.swift */,
+				9262058623525B1C00426537 /* FriendViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -323,6 +329,8 @@
 			files = (
 				9262054A235241C600426537 /* ContactsViewController.swift in Sources */,
 				92620550235241C600426537 /* ContactList.xcdatamodeld in Sources */,
+				9262058723525B1C00426537 /* FriendViewModel.swift in Sources */,
+				9262058523525B0E00426537 /* ColleagueViewModel.swift in Sources */,
 				926205832352516900426537 /* Friend.swift in Sources */,
 				92620548235241C600426537 /* AppDelegate.swift in Sources */,
 				9262058123524FD600426537 /* Colleague.swift in Sources */,
