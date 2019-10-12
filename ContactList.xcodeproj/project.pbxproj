@@ -99,13 +99,13 @@
 		92620546235241C600426537 /* ContactList */ = {
 			isa = PBXGroup;
 			children = (
-				92620547235241C600426537 /* AppDelegate.swift */,
-				92620549235241C600426537 /* ContactsViewController.swift */,
-				9262054B235241C600426537 /* Main.storyboard */,
-				92620551235241C700426537 /* Assets.xcassets */,
-				92620553235241C700426537 /* LaunchScreen.storyboard */,
-				92620556235241C700426537 /* Info.plist */,
-				9262054E235241C600426537 /* ContactList.xcdatamodeld */,
+				9262057923524EAD00426537 /* AppDelegate */,
+				9262057F23524F2400426537 /* Data Models */,
+				9262057B23524EC700426537 /* Models */,
+				9262057A23524EBA00426537 /* Resources */,
+				9262057823524E7A00426537 /* View Controllers */,
+				9262057C23524ECF00426537 /* ViewModels */,
+				9262057D23524EF100426537 /* Views */,
 			);
 			path = ContactList;
 			sourceTree = "<group>";
@@ -126,6 +126,62 @@
 				9262056C235241C800426537 /* Info.plist */,
 			);
 			path = ContactListUITests;
+			sourceTree = "<group>";
+		};
+		9262057823524E7A00426537 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				92620549235241C600426537 /* ContactsViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		9262057923524EAD00426537 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				92620547235241C600426537 /* AppDelegate.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		9262057A23524EBA00426537 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				92620556235241C700426537 /* Info.plist */,
+				92620551235241C700426537 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		9262057B23524EC700426537 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9262057C23524ECF00426537 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		9262057D23524EF100426537 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				92620553235241C700426537 /* LaunchScreen.storyboard */,
+				9262054B235241C600426537 /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9262057F23524F2400426537 /* Data Models */ = {
+			isa = PBXGroup;
+			children = (
+				9262054E235241C600426537 /* ContactList.xcdatamodeld */,
+			);
+			path = "Data Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
