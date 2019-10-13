@@ -21,6 +21,7 @@
 		9262058E23526D1700426537 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262058D23526D1700426537 /* ContactCell.swift */; };
 		927131802353622F00844DBD /* DefaultColleagues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9271317F2353622F00844DBD /* DefaultColleagues.plist */; };
 		927131842353670700844DBD /* DefaultFriends.plist in Resources */ = {isa = PBXBuildFile; fileRef = 927131832353670700844DBD /* DefaultFriends.plist */; };
+		9271318723539B8100844DBD /* FormatUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318623539B8100844DBD /* FormatUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		9262058D23526D1700426537 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		9271317F2353622F00844DBD /* DefaultColleagues.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultColleagues.plist; sourceTree = "<group>"; };
 		927131832353670700844DBD /* DefaultFriends.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultFriends.plist; sourceTree = "<group>"; };
+		9271318623539B8100844DBD /* FormatUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				9262057823524E7A00426537 /* View Controllers */,
 				9262057C23524ECF00426537 /* ViewModels */,
 				9262057D23524EF100426537 /* Views */,
+				9271318523539B6C00844DBD /* Utils */,
 			);
 			path = ContactList;
 			sourceTree = "<group>";
@@ -208,6 +211,14 @@
 				92620553235241C700426537 /* LaunchScreen.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		9271318523539B6C00844DBD /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9271318623539B8100844DBD /* FormatUtils.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -348,6 +359,7 @@
 				9262058723525B1C00426537 /* FriendViewModel.swift in Sources */,
 				9262058523525B0E00426537 /* ColleagueViewModel.swift in Sources */,
 				926205832352516900426537 /* Friend.swift in Sources */,
+				9271318723539B8100844DBD /* FormatUtils.swift in Sources */,
 				92620548235241C600426537 /* AppDelegate.swift in Sources */,
 				9262058123524FD600426537 /* Colleague.swift in Sources */,
 			);

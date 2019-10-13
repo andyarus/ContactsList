@@ -33,17 +33,14 @@ struct FriendViewModel {
   }
   
   var phone: String {
-    return friend.phone
+    return FormatUtils.shared.format(phone: friend.phone)
   }
   
-  var birthday: Date {
-    return friend.birthday
+  var birthday: String {
+    return FormatUtils.shared.format(toString: friend.birthday)
   }
   
   static func defaultFriends() -> [FriendViewModel] {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "dd.MM.yyyy"
-    
     var friends = [FriendViewModel]()
     
     guard let URL = Bundle.main.url(forResource: "DefaultFriends", withExtension: "plist"),
@@ -56,7 +53,7 @@ struct FriendViewModel {
         let middleName = dictionary["MiddleName"],
         let photoName = dictionary["Photo"], let photo = UIImage(named: photoName),
         let phone = dictionary["Phone"],
-        let birthdayString = dictionary["Birthday"], let birthday = dateFormatter.date(from: birthdayString) else {
+        let birthdayString = dictionary["Birthday"], let birthday = FormatUtils.shared.format(toDate: birthdayString) else {
           continue
       }
       

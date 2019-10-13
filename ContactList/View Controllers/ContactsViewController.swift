@@ -79,6 +79,11 @@ extension ContactsViewController: UITableViewDataSource {
     let contact = colleagues[indexPath.row]
     cell.photoImageView.image = contact.photo
     cell.nameLabel.text = "\(contact.lastName) \(contact.firstName) \(contact.middleName ?? "")"
+    cell.phoneLabel.text = contact.phone
+    cell.workPhoneLabel.text = contact.workPhone
+    cell.infoLabel.text = contact.positin
+    
+    //cell.infoLabel.text = contact.birthday
     
     return cell
   }

@@ -33,11 +33,11 @@ struct ColleagueViewModel {
   }
   
   var phone: String {
-    return colleague.phone
+    return FormatUtils.shared.format(phone: colleague.phone)
   }
   
   var workPhone: String {
-    return colleague.workPhone
+    return FormatUtils.shared.format(workPhone: colleague.workPhone)
   }
   
   var positin: String {
