@@ -77,3 +77,15 @@ struct ColleagueViewModel {
   }
   
 }
+
+extension ColleagueViewModel {
+  
+  func configure(_ cell: ContactCell) {
+    cell.photoImageView.image = photo
+    cell.nameLabel.text = "\(lastName) \(firstName) \(middleName ?? "")"
+    cell.phoneLabel.text = phone
+    cell.workPhoneLabel.text = workPhone
+    cell.infoLabel.text = positin
+  }
+  
+}
