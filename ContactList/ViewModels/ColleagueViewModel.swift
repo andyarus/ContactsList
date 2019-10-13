@@ -43,4 +43,37 @@ struct ColleagueViewModel {
   var positin: String {
     return colleague.positin
   }
+  
+  static func defaultColleagues() -> [ColleagueViewModel] {
+    var colleagues = [ColleagueViewModel]()
+    
+    guard let URL = Bundle.main.url(forResource: "DefaultColleagues", withExtension: "plist"),
+      let dictionaries = NSArray(contentsOf: URL) as? [[String: String]] else {
+        return colleagues
+    }
+    for dictionary in dictionaries {
+      guard let firstName = dictionary["FirstName"],
+        let lastName = dictionary["LastName"],
+        let middleName = dictionary["MiddleName"],
+        let photoName = dictionary["Photo"], let photo = UIImage(named: photoName),
+        let phone = dictionary["Phone"],
+        let workPhone = dictionary["WorkPhone"],
+        let position = dictionary["Position"] else {
+          continue
+      }
+      
+      let colleague = Colleague(firstName: firstName,
+                                lastName: lastName,
+                                middleName: middleName,
+                                photo: photo,
+                                phone: phone,
+                                workPhone: workPhone,
+                                positin: position)
+      
+      colleagues.append(ColleagueViewModel(colleague: colleague))
+    }
+    
+    return colleagues
+  }
+  
 }

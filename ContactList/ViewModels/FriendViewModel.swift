@@ -39,4 +39,38 @@ struct FriendViewModel {
   var birthday: Date {
     return friend.birthday
   }
+  
+  static func defaultFriends() -> [FriendViewModel] {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "dd.MM.yyyy"
+    
+    var friends = [FriendViewModel]()
+    
+    guard let URL = Bundle.main.url(forResource: "DefaultFriends", withExtension: "plist"),
+      let dictionaries = NSArray(contentsOf: URL) as? [[String: String]] else {
+        return friends
+    }
+    for dictionary in dictionaries {
+      guard let firstName = dictionary["FirstName"],
+        let lastName = dictionary["LastName"],
+        let middleName = dictionary["MiddleName"],
+        let photoName = dictionary["Photo"], let photo = UIImage(named: photoName),
+        let phone = dictionary["Phone"],
+        let birthdayString = dictionary["Birthday"], let birthday = dateFormatter.date(from: birthdayString) else {
+          continue
+      }
+      
+      let friend = Friend(firstName: firstName,
+                             lastName: lastName,
+                             middleName: middleName,
+                             photo: photo,
+                             phone: phone,
+                             birthday: birthday)
+      
+      friends.append(FriendViewModel(friend: friend))
+    }
+    
+    return friends
+  }
+  
 }

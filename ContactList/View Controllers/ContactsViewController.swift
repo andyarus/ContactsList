@@ -11,12 +11,14 @@ import UIKit
 class ContactsViewController: UIViewController {
   
   // MARK: - Properties
+  
   private var colleagues: [ColleagueViewModel] = []
   private var friends: [FriendViewModel] = []
   
   let tableView = UITableView()
   
   // MARK: - View Lifecycle
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -25,17 +27,17 @@ class ContactsViewController: UIViewController {
   }
   
   // MARK: - Setup Methods
+  
   func setup() {
     setupTableView()
   }
   
   func setupTableView() {
+    tableView.dataSource = self
     tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseIdentifier)
+    tableView.rowHeight = 69.0
     
     view.addSubview(tableView)
-    
-    //tableView.delegate = self
-    tableView.dataSource = self
     
     tableView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
@@ -46,37 +48,24 @@ class ContactsViewController: UIViewController {
       ])
   }
   
+  // MARK: - Load Methods
+  
   func load() {
     loadDefaultColleagues()
     loadDefaultFriends()
   }
   
   func loadDefaultColleagues() {
-    let colleague = Colleague(firstName: "Вася1",
-                              lastName: "Пупкин",
-                              middleName: "Алибабаевич",
-                              photo: UIImage(),
-                              phone: "12345",
-                              workPhone: "911",
-                              positin: "менеджер")
-    let colleagueViewModel = ColleagueViewModel(colleague: colleague)
-    
-    colleagues.append(colleagueViewModel)
+    colleagues = ColleagueViewModel.defaultColleagues()
   }
   
   func loadDefaultFriends() {
-    let friend = Friend(firstName: "Вася2",
-                              lastName: "Пупкин",
-                              middleName: "Алибабаевич",
-                              photo: UIImage(),
-                              phone: "12345",
-                              birthday: Date())
-    let friendViewModel = FriendViewModel(friend: friend)
-    
-    friends.append(friendViewModel)
+    friends = FriendViewModel.defaultFriends()
   }
   
 }
+
+// MARK: - UITableViewDataSource
 
 extension ContactsViewController: UITableViewDataSource {
   
@@ -88,6 +77,7 @@ extension ContactsViewController: UITableViewDataSource {
     let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.reuseIdentifier) as! ContactCell
     
     let contact = colleagues[indexPath.row]
+    cell.photoImageView.image = contact.photo
     cell.nameLabel.text = "\(contact.lastName) \(contact.firstName) \(contact.middleName ?? "")"
     
     return cell

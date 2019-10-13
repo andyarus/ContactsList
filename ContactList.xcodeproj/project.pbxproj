@@ -19,6 +19,8 @@
 		9262058523525B0E00426537 /* ColleagueViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262058423525B0E00426537 /* ColleagueViewModel.swift */; };
 		9262058723525B1C00426537 /* FriendViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262058623525B1C00426537 /* FriendViewModel.swift */; };
 		9262058E23526D1700426537 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9262058D23526D1700426537 /* ContactCell.swift */; };
+		927131802353622F00844DBD /* DefaultColleagues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9271317F2353622F00844DBD /* DefaultColleagues.plist */; };
+		927131842353670700844DBD /* DefaultFriends.plist in Resources */ = {isa = PBXBuildFile; fileRef = 927131832353670700844DBD /* DefaultFriends.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 		9262058423525B0E00426537 /* ColleagueViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColleagueViewModel.swift; sourceTree = "<group>"; };
 		9262058623525B1C00426537 /* FriendViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewModel.swift; sourceTree = "<group>"; };
 		9262058D23526D1700426537 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		9271317F2353622F00844DBD /* DefaultColleagues.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultColleagues.plist; sourceTree = "<group>"; };
+		927131832353670700844DBD /* DefaultFriends.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultFriends.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,7 @@
 				9262057F23524F2400426537 /* Data Models */,
 				9262057B23524EC700426537 /* Models */,
 				9262057A23524EBA00426537 /* Resources */,
+				9271317E2353595C00844DBD /* Storyboards */,
 				9262057823524E7A00426537 /* View Controllers */,
 				9262057C23524ECF00426537 /* ViewModels */,
 				9262057D23524EF100426537 /* Views */,
@@ -155,6 +160,8 @@
 		9262057A23524EBA00426537 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9271317F2353622F00844DBD /* DefaultColleagues.plist */,
+				927131832353670700844DBD /* DefaultFriends.plist */,
 				92620556235241C700426537 /* Info.plist */,
 				92620551235241C700426537 /* Assets.xcassets */,
 			);
@@ -182,7 +189,6 @@
 		9262057D23524EF100426537 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				92620553235241C700426537 /* LaunchScreen.storyboard */,
 				9262058D23526D1700426537 /* ContactCell.swift */,
 			);
 			path = Views;
@@ -194,6 +200,14 @@
 				9262054E235241C600426537 /* ContactList.xcdatamodeld */,
 			);
 			path = "Data Models";
+			sourceTree = "<group>";
+		};
+		9271317E2353595C00844DBD /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				92620553235241C700426537 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboards;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,6 +315,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				92620555235241C700426537 /* LaunchScreen.storyboard in Resources */,
+				927131802353622F00844DBD /* DefaultColleagues.plist in Resources */,
+				927131842353670700844DBD /* DefaultFriends.plist in Resources */,
 				92620552235241C700426537 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
