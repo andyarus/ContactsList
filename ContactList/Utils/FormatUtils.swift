@@ -21,14 +21,23 @@ class FormatUtils {
   func format(phone: String) -> String {
     var phone = phone
     if phone.starts(with: "8") {
-      phone = "тел: +7\(phone.dropFirst())"
+      phone = "+7\(phone.dropFirst())"
     }
+    phone = "тел: \(phone)"
     
     return phone
   }
   
   func format(workPhone: String) -> String {
     return "раб.тел: \(workPhone)"
+  }
+  
+  func clear(phone: String) -> String {
+    return phone.replacingOccurrences(of: "тел: ", with: "")
+  }
+  
+  func clear(workPhone: String) -> String {
+    return workPhone.replacingOccurrences(of: "раб.тел: ", with: "")
   }
   
   func format(toDate birthday: String) -> Date? {

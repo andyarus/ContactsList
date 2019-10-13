@@ -18,12 +18,12 @@ class ContactsViewController: UIViewController {
   private var isColleagues: Bool = true {
     willSet(colleagues) {
       if colleagues {
-        colleaguesButton.backgroundColor = .orange
-        friendsButton.backgroundColor = .white
+        colleaguesButton.backgroundColor = .checked
+        friendsButton.backgroundColor = .unchecked
         tableView.reloadData()
       } else {
-        colleaguesButton.backgroundColor = .white
-        friendsButton.backgroundColor = .orange
+        colleaguesButton.backgroundColor = .unchecked
+        friendsButton.backgroundColor = .checked
         tableView.reloadData()
       }
     }
@@ -161,7 +161,35 @@ extension ContactsViewController: UITableViewDataSource {
 extension ContactsViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    print(indexPath)
+    let vc = ContactViewController()
+    
+    let relation: Relation    
+    if isColleagues {
+      relation = .colleague(colleagues[indexPath.row])
+    } else {
+      relation = .friend(friends[indexPath.row])
+    }
+    vc.contact = ContactViewModel(contact: Contact(relation: relation))
+    vc.idx = indexPath.row
+    
+    navigationController?.pushViewController(vc, animated: true)
+  }
+  
+}
+
+// MARK: - Update Contact Helper
+
+extension ContactsViewController {
+  
+  func updateContact(_ contact: ContactViewModel, in idx: Int) {
+    switch contact.relation {
+    case .colleague(let colleague):
+      colleagues[idx] = colleague
+    case .friend(let friend):
+      friends[idx] = friend
+    }
+    
+    tableView.reloadData()
   }
   
 }

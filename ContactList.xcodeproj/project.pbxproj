@@ -22,6 +22,13 @@
 		927131802353622F00844DBD /* DefaultColleagues.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9271317F2353622F00844DBD /* DefaultColleagues.plist */; };
 		927131842353670700844DBD /* DefaultFriends.plist in Resources */ = {isa = PBXBuildFile; fileRef = 927131832353670700844DBD /* DefaultFriends.plist */; };
 		9271318723539B8100844DBD /* FormatUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318623539B8100844DBD /* FormatUtils.swift */; };
+		927131892353B98900844DBD /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131882353B98900844DBD /* ContactViewController.swift */; };
+		9271318B2353BEB800844DBD /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318A2353BEB800844DBD /* Contact.swift */; };
+		9271318D2353BF3200844DBD /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318C2353BF3200844DBD /* Relation.swift */; };
+		9271318F2353BF8900844DBD /* ContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318E2353BF8900844DBD /* ContactViewModel.swift */; };
+		927131922353C63200844DBD /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131912353C63200844DBD /* UIColor+Extensions.swift */; };
+		927131942353CD8A00844DBD /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131932353CD8A00844DBD /* TextField.swift */; };
+		927131962353E03C00844DBD /* AlertUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131952353E03C00844DBD /* AlertUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +70,13 @@
 		9271317F2353622F00844DBD /* DefaultColleagues.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultColleagues.plist; sourceTree = "<group>"; };
 		927131832353670700844DBD /* DefaultFriends.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultFriends.plist; sourceTree = "<group>"; };
 		9271318623539B8100844DBD /* FormatUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatUtils.swift; sourceTree = "<group>"; };
+		927131882353B98900844DBD /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
+		9271318A2353BEB800844DBD /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		9271318C2353BF3200844DBD /* Relation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relation.swift; sourceTree = "<group>"; };
+		9271318E2353BF8900844DBD /* ContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewModel.swift; sourceTree = "<group>"; };
+		927131912353C63200844DBD /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		927131932353CD8A00844DBD /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		927131952353E03C00844DBD /* AlertUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,13 +129,14 @@
 			children = (
 				9262057923524EAD00426537 /* AppDelegate */,
 				9262057F23524F2400426537 /* Data Models */,
+				927131902353C5F700844DBD /* Extensions */,
 				9262057B23524EC700426537 /* Models */,
 				9262057A23524EBA00426537 /* Resources */,
 				9271317E2353595C00844DBD /* Storyboards */,
+				9271318523539B6C00844DBD /* Utils */,
 				9262057823524E7A00426537 /* View Controllers */,
 				9262057C23524ECF00426537 /* ViewModels */,
 				9262057D23524EF100426537 /* Views */,
-				9271318523539B6C00844DBD /* Utils */,
 			);
 			path = ContactList;
 			sourceTree = "<group>";
@@ -148,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				92620549235241C600426537 /* ContactsViewController.swift */,
+				927131882353B98900844DBD /* ContactViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -176,6 +192,8 @@
 			children = (
 				9262058023524FD600426537 /* Colleague.swift */,
 				926205822352516900426537 /* Friend.swift */,
+				9271318A2353BEB800844DBD /* Contact.swift */,
+				9271318C2353BF3200844DBD /* Relation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -185,6 +203,7 @@
 			children = (
 				9262058423525B0E00426537 /* ColleagueViewModel.swift */,
 				9262058623525B1C00426537 /* FriendViewModel.swift */,
+				9271318E2353BF8900844DBD /* ContactViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -193,6 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				9262058D23526D1700426537 /* ContactCell.swift */,
+				927131932353CD8A00844DBD /* TextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -217,8 +237,17 @@
 			isa = PBXGroup;
 			children = (
 				9271318623539B8100844DBD /* FormatUtils.swift */,
+				927131952353E03C00844DBD /* AlertUtils.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		927131902353C5F700844DBD /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				927131912353C63200844DBD /* UIColor+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -356,12 +385,19 @@
 				9262058E23526D1700426537 /* ContactCell.swift in Sources */,
 				9262054A235241C600426537 /* ContactsViewController.swift in Sources */,
 				92620550235241C600426537 /* ContactList.xcdatamodeld in Sources */,
+				927131942353CD8A00844DBD /* TextField.swift in Sources */,
+				927131962353E03C00844DBD /* AlertUtils.swift in Sources */,
 				9262058723525B1C00426537 /* FriendViewModel.swift in Sources */,
 				9262058523525B0E00426537 /* ColleagueViewModel.swift in Sources */,
 				926205832352516900426537 /* Friend.swift in Sources */,
+				9271318B2353BEB800844DBD /* Contact.swift in Sources */,
+				9271318D2353BF3200844DBD /* Relation.swift in Sources */,
 				9271318723539B8100844DBD /* FormatUtils.swift in Sources */,
 				92620548235241C600426537 /* AppDelegate.swift in Sources */,
 				9262058123524FD600426537 /* Colleague.swift in Sources */,
+				927131922353C63200844DBD /* UIColor+Extensions.swift in Sources */,
+				927131892353B98900844DBD /* ContactViewController.swift in Sources */,
+				9271318F2353BF8900844DBD /* ContactViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

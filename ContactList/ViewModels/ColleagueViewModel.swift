@@ -40,8 +40,8 @@ struct ColleagueViewModel {
     return FormatUtils.shared.format(workPhone: colleague.workPhone)
   }
   
-  var positin: String {
-    return colleague.positin
+  var position: String {
+    return colleague.position
   }
   
   static func defaultColleagues() -> [ColleagueViewModel] {
@@ -68,7 +68,7 @@ struct ColleagueViewModel {
                                 photo: photo,
                                 phone: phone,
                                 workPhone: workPhone,
-                                positin: position)
+                                position: position)
       
       colleagues.append(ColleagueViewModel(colleague: colleague))
     }
@@ -85,7 +85,7 @@ extension ColleagueViewModel {
     cell.nameLabel.text = "\(lastName) \(firstName) \(middleName ?? "")"
     cell.phoneLabel.text = phone
     cell.workPhoneLabel.text = workPhone
-    cell.infoLabel.text = positin
+    cell.infoLabel.text = position
   }
   
 }
