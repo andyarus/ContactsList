@@ -20,12 +20,13 @@ class ContactsViewController: UIViewController {
       if colleagues {
         colleaguesButton.backgroundColor = .checked
         friendsButton.backgroundColor = .unchecked
-        tableView.reloadData()
       } else {
         colleaguesButton.backgroundColor = .unchecked
         friendsButton.backgroundColor = .checked
-        tableView.reloadData()
       }
+    }    
+    didSet {
+      tableView.reloadData()
     }
   }
   
@@ -55,6 +56,8 @@ class ContactsViewController: UIViewController {
   
   func setupNavigationBar() {
     navigationItem.title = "Контакты"
+    
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addContactButtonTapped))
   }
   
   func setupButtons() {
@@ -109,7 +112,7 @@ class ContactsViewController: UIViewController {
     loadDefaultColleagues()
     loadDefaultFriends()
     
-    isColleagues = true // tap
+    isColleagues = true // colleaguesButtonTapped()
   }
   
   func loadDefaultColleagues() {
@@ -120,16 +123,31 @@ class ContactsViewController: UIViewController {
     friends = FriendViewModel.defaultFriends()
   }
   
-  // MARK: - Tap Methods
+  // MARK: - Actions
   
   @objc
   func colleaguesButtonTapped() {
+    guard isColleagues != true else { return } // don't reload tableView
     isColleagues = true
   }
   
   @objc
   func friendsButtonTapped() {
+    guard isColleagues != false else { return } // don't reload tableView
     isColleagues = false
+  }
+  
+  @objc
+  func addContactButtonTapped() {
+    let vc = AddContactViewController()
+    
+    if isColleagues {
+      vc.relation = .colleague(nil)
+    } else {
+      vc.relation = .friend(nil)
+    }
+    
+    navigationController?.pushViewController(vc, animated: true)
   }
   
 }
@@ -161,7 +179,7 @@ extension ContactsViewController: UITableViewDataSource {
 extension ContactsViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let vc = ContactViewController()
+    let vc = EditContactViewController()
     
     let relation: Relation    
     if isColleagues {
@@ -177,16 +195,33 @@ extension ContactsViewController: UITableViewDelegate {
   
 }
 
-// MARK: - Update Contact Helper
+// MARK: - Helpers
 
 extension ContactsViewController {
   
   func updateContact(_ contact: ContactViewModel, in idx: Int) {
     switch contact.relation {
     case .colleague(let colleague):
+      guard let colleague = colleague else { return }
       colleagues[idx] = colleague
     case .friend(let friend):
+      guard let friend = friend else { return }
       friends[idx] = friend
+    }
+    
+    tableView.reloadData()
+  }
+  
+  func addContact(_ contact: ContactViewModel) {
+    switch contact.relation {
+    case .colleague(let colleague):
+      guard let colleague = colleague else { return }
+      colleagues.append(colleague)
+      colleagues.sort(by: <)
+    case .friend(let friend):
+      guard let friend = friend else { return }
+      friends.append(friend)
+      friends.sort(by: <)
     }
     
     tableView.reloadData()

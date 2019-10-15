@@ -9,6 +9,6 @@
 import Foundation
 
 enum Relation {
-  case colleague(ColleagueViewModel)
-  case friend(FriendViewModel)
+  case colleague(ColleagueViewModel?)
+  case friend(FriendViewModel?)
 }

@@ -1,5 +1,5 @@
 //
-//  FormatUtils.swift
+//  Format.swift
 //  ContactList
 //
 //  Created by Andrei Coder on 13/10/2019.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-class FormatUtils {
+class Format {
   
-  static let shared = FormatUtils()
+  static let shared = Format()
   
   let dateFormatter = DateFormatter()
   

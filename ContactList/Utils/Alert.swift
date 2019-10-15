@@ -1,5 +1,5 @@
 //
-//  AlertUtils.swift
+//  Alert.swift
 //  ContactList
 //
 //  Created by Andrei Coder on 14/10/2019.
@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-class AlertUtils {
+class Alert {
   
-  static let shared = AlertUtils()
+  static let shared = Alert()
   
   func error(in view: UIViewController, message: String, title: String? = "Ошибка") {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

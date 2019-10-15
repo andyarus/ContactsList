@@ -22,15 +22,16 @@ struct ContactViewModel {
 
 extension ContactViewModel {
   
-  func configure(_ vc: ContactViewController) {
+  func configure(_ vc: EditContactViewController) {
     switch contact.relation {
     case .colleague(let colleague):
+      guard let colleague = colleague else { return }
       vc.photoImageView.image = colleague.photo
       vc.firstNameTextField.text = colleague.firstName
       vc.lastNameTextField.text = colleague.lastName
       vc.middleNameTextField.text = colleague.middleName      
-      vc.phoneTextField.text = FormatUtils.shared.clear(phone: colleague.phone)
-      vc.workPhoneTextField.text = FormatUtils.shared.clear(workPhone: colleague.workPhone)
+      vc.phoneTextField.text = Format.shared.clear(phone: colleague.phone)
+      vc.workPhoneTextField.text = Format.shared.clear(workPhone: colleague.workPhone)
       vc.positionTextField.text = colleague.position
       
       vc.workPhoneTextField.isHidden = false
@@ -39,11 +40,12 @@ extension ContactViewModel {
       
       vc.setupColleagueConstraints()
     case .friend(let friend):
+      guard let friend = friend else { return }
       vc.photoImageView.image = friend.photo
       vc.firstNameTextField.text = friend.firstName
       vc.lastNameTextField.text = friend.lastName
       vc.middleNameTextField.text = friend.middleName
-      vc.phoneTextField.text = FormatUtils.shared.clear(phone: friend.phone)
+      vc.phoneTextField.text = Format.shared.clear(phone: friend.phone)
       vc.birthdayTextField.text = friend.birthday
       
       vc.workPhoneTextField.isHidden = true

@@ -1,5 +1,5 @@
 //
-//  ContactViewController.swift
+//  EditContactViewController.swift
 //  ContactList
 //
 //  Created by Andrei Coder on 14/10/2019.
@@ -8,12 +8,14 @@
 
 import UIKit
 
-class ContactViewController: UIViewController {
+class EditContactViewController: UIViewController {
 
   // MARK: - Properties
   
   var contact: ContactViewModel?
   var idx: Int?
+  
+  // MARK: - Subviews
   
   let photoImageView: UIImageView = {
     let imageView = UIImageView()
@@ -21,84 +23,49 @@ class ContactViewController: UIViewController {
     imageView.contentMode = .scaleAspectFill
     imageView.layer.masksToBounds = true
     imageView.layer.cornerRadius = 23.0
-    
     return imageView
   }()
   
   let firstNameTextField: TextField = {
     let textField = TextField()
-    textField.translatesAutoresizingMaskIntoConstraints = false
     textField.placeholder = "Имя"
-    textField.layer.borderWidth = 1.0
-    textField.layer.borderColor = UIColor.lightGray.cgColor
-    textField.layer.cornerRadius = 4.0
-
     return textField
   }()
 
   let lastNameTextField: TextField = {
     let textField = TextField()
-    textField.translatesAutoresizingMaskIntoConstraints = false
     textField.placeholder = "Фамилия"
-    textField.layer.borderWidth = 1.0
-    textField.layer.borderColor = UIColor.lightGray.cgColor
-    textField.layer.cornerRadius = 4.0
-
     return textField
   }()
 
   let middleNameTextField: TextField = {
     let textField = TextField()
-    textField.translatesAutoresizingMaskIntoConstraints = false
     textField.placeholder = "Отчество"
-    textField.layer.borderWidth = 1.0
-    textField.layer.borderColor = UIColor.lightGray.cgColor
-    textField.layer.cornerRadius = 4.0
-
     return textField
   }()
 
   let phoneTextField: TextField = {
     let textField = TextField()
-    textField.translatesAutoresizingMaskIntoConstraints = false
     textField.placeholder = "Телефон"
-    textField.layer.borderWidth = 1.0
-    textField.layer.borderColor = UIColor.lightGray.cgColor
-    textField.layer.cornerRadius = 4.0
-
+    textField.keyboardType = .phonePad
     return textField
   }()
 
   let workPhoneTextField: TextField = {
     let textField = TextField()
-    textField.translatesAutoresizingMaskIntoConstraints = false
     textField.placeholder = "Рабочий телефон"
-    textField.layer.borderWidth = 1.0
-    textField.layer.borderColor = UIColor.lightGray.cgColor
-    textField.layer.cornerRadius = 4.0
-
     return textField
   }()
   
   let positionTextField: TextField = {
     let textField = TextField()
-    textField.translatesAutoresizingMaskIntoConstraints = false
     textField.placeholder = "Должность"
-    textField.layer.borderWidth = 1.0
-    textField.layer.borderColor = UIColor.lightGray.cgColor
-    textField.layer.cornerRadius = 4.0
-    
     return textField
   }()
   
   let birthdayTextField: TextField = {
     let textField = TextField()
-    textField.translatesAutoresizingMaskIntoConstraints = false
     textField.placeholder = "Дата рождения"
-    textField.layer.borderWidth = 1.0
-    textField.layer.borderColor = UIColor.lightGray.cgColor
-    textField.layer.cornerRadius = 4.0
-
     return textField
   }()
   
@@ -107,7 +74,6 @@ class ContactViewController: UIViewController {
     button.translatesAutoresizingMaskIntoConstraints = false
     button.setTitle("Сохранить", for: .normal)
     button.setTitleColor(.blue, for: .normal)
-    
     return button
   }()
 
@@ -126,6 +92,7 @@ class ContactViewController: UIViewController {
     
     addSubviews()
     setupConstraints()
+    setupTextFields()
     
     saveButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(saveButtonTapped)))
     
@@ -207,48 +174,89 @@ class ContactViewController: UIViewController {
       ])
   }
   
-  // MARK: - Tap Methods
+  func setupTextFields() {
+    firstNameTextField.delegate = self
+    lastNameTextField.delegate = self
+    middleNameTextField.delegate = self
+    phoneTextField.delegate = self
+    workPhoneTextField.delegate = self
+    positionTextField.delegate = self
+    birthdayTextField.delegate = self
+  }
+  
+  // MARK: - Actions
   
   @objc
   func saveButtonTapped() {
-    guard let firstName = firstNameTextField.text, !firstName.isEmpty else {
-      AlertUtils.shared.error(in: self, message: "Имя не может быть пустым!")
+    // firstName validation
+    guard let firstName = firstNameTextField.text?.trimmingCharacters(in: .whitespaces), !firstName.isEmpty else {
+      Alert.shared.error(in: self, message: "Имя не может быть пустым!")
+      return
+    }
+    guard Validator.shared.isValid(name: firstName) else {
+      Alert.shared.error(in: self, message: "Неверный формат имени! Разрешены только буквы.")
       return
     }
     
-    guard let lastName = lastNameTextField.text, !lastName.isEmpty else {
-      AlertUtils.shared.error(in: self, message: "Фамилия не может быть пустой!")
+    // lastName validation
+    guard let lastName = lastNameTextField.text?.trimmingCharacters(in: .whitespaces), !lastName.isEmpty else {
+      Alert.shared.error(in: self, message: "Фамилия не может быть пустой!")
+      return
+    }
+    guard Validator.shared.isValid(name: lastName) else {
+      Alert.shared.error(in: self, message: "Неверный формат фамилии! Разрешены только буквы.")
       return
     }
     
-    let middleName = middleNameTextField.text
+    // middleName validation
+    guard let middleName = middleNameTextField.text?.trimmingCharacters(in: .whitespaces) else {
+      Alert.shared.error(in: self, message: "Что-то пошло не так")
+      return
+    }
+    guard Validator.shared.isValid(middleName: middleName) else {
+      Alert.shared.error(in: self, message: "Неверный формат отчества! Разрешены только буквы.")
+      return
+    }
     
-    guard let phone = phoneTextField.text, !phone.isEmpty else {
-      AlertUtils.shared.error(in: self, message: "Телефон не может быть пустой!")
+    guard let phone = phoneTextField.text?.trimmingCharacters(in: .whitespaces), !phone.isEmpty else {
+      Alert.shared.error(in: self, message: "Телефон не может быть пустой!")
+      return
+    }
+    guard Validator.shared.isValid(phone: phone) else {
+      Alert.shared.error(in: self, message: "Неверный формат телефона! Разрешены только номера до 11 цифр.")
       return
     }
     
     guard let photo = photoImageView.image else {
-      AlertUtils.shared.error(in: self, message: "Что-то пошло не так")
+      Alert.shared.error(in: self, message: "Что-то пошло не так")
       return
     }
     
     guard let vc = navigationController?.viewControllers.first as? ContactsViewController,
       let idx = idx,
       let relation = contact?.relation else {
-        AlertUtils.shared.error(in: self, message: "Что-то пошло не так")
+        Alert.shared.error(in: self, message: "Что-то пошло не так")
         return
       }
     
     let updatedRelation: Relation
     switch relation {
     case .colleague:
-      guard let workPhone = workPhoneTextField.text, !workPhone.isEmpty else {
-        AlertUtils.shared.error(in: self, message: "Рабочий телефон не может быть пустой!")
+      guard let workPhone = workPhoneTextField.text?.trimmingCharacters(in: .whitespaces), !workPhone.isEmpty else {
+        Alert.shared.error(in: self, message: "Рабочий телефон не может быть пустой!")
         return
       }
-      guard let position = positionTextField.text, !position.isEmpty else {
-        AlertUtils.shared.error(in: self, message: "Должность не может быть пустой!")
+      guard Validator.shared.isValid(phone: workPhone) else {
+        Alert.shared.error(in: self, message: "Неверный формат телефона! Разрешены только номера до 11 цифр.")
+        return
+      }
+      
+      guard let position = positionTextField.text?.trimmingCharacters(in: .whitespaces), !position.isEmpty else {
+        Alert.shared.error(in: self, message: "Должность не может быть пустой!")
+        return
+      }
+      guard Validator.shared.isValid(position: position) else {
+        Alert.shared.error(in: self, message: "Неверный формат должности!")
         return
       }
       
@@ -262,8 +270,12 @@ class ContactViewController: UIViewController {
       
       updatedRelation = .colleague(ColleagueViewModel(colleague: colleague))
     case .friend:
-      guard let birthdayString = birthdayTextField.text, let birthday = FormatUtils.shared.format(toDate: birthdayString) else {
-        AlertUtils.shared.error(in: self, message: "Неверный формат даты рождения! Формат должен быть таким:\(FormatUtils.shared.format(toString: Date())) (день.месяц.год)")
+      guard let birthdayString = birthdayTextField.text?.trimmingCharacters(in: .whitespaces), let birthday = Format.shared.format(toDate: birthdayString) else {
+        Alert.shared.error(in: self, message: "Неверный формат даты рождения! Формат должен быть таким:\(Format.shared.format(toString: Date())) (день.месяц.год)")
+        return
+      }
+      guard Validator.shared.isValid(birthday: birthday) else {
+        Alert.shared.error(in: self, message: "Неверная дата рождения!")
         return
       }
       
@@ -281,6 +293,41 @@ class ContactViewController: UIViewController {
     vc.updateContact(updatedContact, in: idx)
     
     navigationController?.popViewController(animated: true)
+  }
+  
+}
+
+// MARK: - UITextFieldDelegate
+
+extension EditContactViewController: UITextFieldDelegate {
+  
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    switch textField {
+    case firstNameTextField:
+      lastNameTextField.becomeFirstResponder()
+    case lastNameTextField:
+      middleNameTextField.becomeFirstResponder()
+    case middleNameTextField:
+      phoneTextField.becomeFirstResponder()
+    case phoneTextField:
+      guard let relation = contact?.relation else { return false }
+      switch relation {
+      case .colleague:
+        workPhoneTextField.becomeFirstResponder()
+      case .friend:
+        birthdayTextField.becomeFirstResponder()
+      }
+    case workPhoneTextField:
+      positionTextField.becomeFirstResponder()
+    case positionTextField:
+      firstNameTextField.becomeFirstResponder()
+    case birthdayTextField:
+      firstNameTextField.becomeFirstResponder()
+    default:
+      textField.resignFirstResponder()
+    }
+    
+    return false
   }
   
 }

@@ -33,11 +33,11 @@ struct ColleagueViewModel {
   }
   
   var phone: String {
-    return FormatUtils.shared.format(phone: colleague.phone)
+    return Format.shared.format(phone: colleague.phone)
   }
   
   var workPhone: String {
-    return FormatUtils.shared.format(workPhone: colleague.workPhone)
+    return Format.shared.format(workPhone: colleague.workPhone)
   }
   
   var position: String {
@@ -73,19 +73,51 @@ struct ColleagueViewModel {
       colleagues.append(ColleagueViewModel(colleague: colleague))
     }
     
+    colleagues.sort(by: <)
+    
     return colleagues
   }
   
 }
 
+// MARK: - Configure
+
 extension ColleagueViewModel {
   
   func configure(_ cell: ContactCell) {
     cell.photoImageView.image = photo
-    cell.nameLabel.text = "\(lastName) \(firstName) \(middleName ?? "")"
+    
+    var fullName = firstName
+    if let middleName = middleName, !middleName.isEmpty {
+      fullName.append(" \(middleName)")
+    }
+    fullName.append(" \(lastName)")
+    
+    cell.nameLabel.text = fullName
     cell.phoneLabel.text = phone
     cell.workPhoneLabel.text = workPhone
     cell.infoLabel.text = position
+  }
+  
+}
+
+// MARK: - Comparable
+
+extension ColleagueViewModel: Comparable {
+  
+  static func == (lhs: ColleagueViewModel, rhs: ColleagueViewModel) -> Bool {
+    return lhs.firstName == rhs.firstName &&
+      lhs.lastName == rhs.lastName &&
+      lhs.middleName == rhs.middleName &&
+      lhs.photo == rhs.photo &&
+      lhs.phone == rhs.phone &&
+      lhs.workPhone == rhs.workPhone &&
+      lhs.position == rhs.position
+  }
+  
+  static func < (lhs: ColleagueViewModel, rhs: ColleagueViewModel) -> Bool {
+    return lhs.firstName != rhs.firstName ? lhs.firstName < rhs.firstName :
+      lhs.lastName != rhs.lastName ? lhs.lastName < rhs.lastName : lhs.middleName ?? "" < rhs.middleName ?? ""
   }
   
 }

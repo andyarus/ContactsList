@@ -33,11 +33,11 @@ struct FriendViewModel {
   }
   
   var phone: String {
-    return FormatUtils.shared.format(phone: friend.phone)
+    return Format.shared.format(phone: friend.phone)
   }
   
   var birthday: String {
-    return FormatUtils.shared.format(toString: friend.birthday)
+    return Format.shared.format(toString: friend.birthday)
   }
   
   static func defaultFriends() -> [FriendViewModel] {
@@ -53,7 +53,7 @@ struct FriendViewModel {
         let middleName = dictionary["MiddleName"],
         let photoName = dictionary["Photo"], let photo = UIImage(named: photoName),
         let phone = dictionary["Phone"],
-        let birthdayString = dictionary["Birthday"], let birthday = FormatUtils.shared.format(toDate: birthdayString) else {
+        let birthdayString = dictionary["Birthday"], let birthday = Format.shared.format(toDate: birthdayString) else {
           continue
       }
       
@@ -67,18 +67,49 @@ struct FriendViewModel {
       friends.append(FriendViewModel(friend: friend))
     }
     
+    friends.sort(by: <)
+    
     return friends
   }
   
 }
 
+// MARK: - Configure
+
 extension FriendViewModel {
   
   func configure(_ cell: ContactCell) {
     cell.photoImageView.image = photo
-    cell.nameLabel.text = "\(lastName) \(firstName) \(middleName ?? "")"
+    
+    var fullName = firstName
+    if let middleName = middleName, !middleName.isEmpty {
+      fullName.append(" \(middleName)")
+    }
+    fullName.append(" \(lastName)")
+    
+    cell.nameLabel.text = fullName
     cell.phoneLabel.text = phone
     cell.infoLabel.text = birthday
+  }
+  
+}
+
+// MARK: - Comparable
+
+extension FriendViewModel: Comparable {
+  
+  static func == (lhs: FriendViewModel, rhs: FriendViewModel) -> Bool {
+    return lhs.firstName == rhs.firstName &&
+      lhs.lastName == rhs.lastName &&
+      lhs.middleName == rhs.middleName &&
+      lhs.photo == rhs.photo &&
+      lhs.phone == rhs.phone &&
+      lhs.birthday == rhs.birthday
+  }
+  
+  static func < (lhs: FriendViewModel, rhs: FriendViewModel) -> Bool {
+    return lhs.firstName != rhs.firstName ? lhs.firstName < rhs.firstName :
+      lhs.lastName != rhs.lastName ? lhs.lastName < rhs.lastName : lhs.middleName ?? "" < rhs.middleName ?? ""
   }
   
 }
