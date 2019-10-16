@@ -13,6 +13,9 @@ class Alert {
   
   static let shared = Alert()
   
+  private init() {
+  }
+  
   func error(in view: UIViewController, message: String, title: String? = "Ошибка") {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

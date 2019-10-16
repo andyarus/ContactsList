@@ -14,7 +14,7 @@ class Format {
   
   let dateFormatter = DateFormatter()
   
-  init() {
+  private init() {
     dateFormatter.dateFormat = "dd.MM.yyyy"
   }
   

@@ -16,6 +16,7 @@ class ContactViewController: UIViewController {
   open var contact: ContactViewModel?
   open var idx: Int?
   
+  private var datePicker = UIDatePicker()
   private var imagePicker = UIImagePickerController()
   
   // MARK: - Keyboard Show/Hide Handling
@@ -191,15 +192,23 @@ class ContactViewController: UIViewController {
     touchLocation = gr.location(in: view)
     textFieldHeight = birthdayTextField.frame.height
     birthdayTextField.becomeFirstResponder()
+    
+    guard let birthdayString = birthdayTextField.text?.trimmingCharacters(in: .whitespaces),
+      let birthday = Format.shared.format(toDate: birthdayString),
+      Validator.shared.isValid(birthday: birthday) else { return }
+    
+    datePicker.setDate(birthday, animated: true)
   }
   
   // MARK: - Setup Methods
   
   func setup() {
     setupUI()
-    setupKeyboardHandling()
-    setupImagePickerController()
     setupByRole()
+    setupByRelation()
+    setupKeyboardHandling()
+    setupDatePicker()
+    setupImagePickerController()
   }
   
   func setupUI() {
@@ -282,22 +291,6 @@ class ContactViewController: UIViewController {
       //changeContactButton.topAnchor.constraint(equalTo: birthdayTextField.bottomAnchor, constant: 30.0),
       changeContactButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
       ])
-    
-    guard let relation = contact?.relation else { return }
-    switch relation {
-    case .colleague:
-      workPhoneTextField.isHidden = false
-      positionTextField.isHidden = false
-      birthdayTextField.isHidden = true
-      
-      setupColleagueConstraints()
-    case .friend:
-      workPhoneTextField.isHidden = true
-      positionTextField.isHidden = true
-      birthdayTextField.isHidden = false
-      
-      setupFriendConstraints()
-    }
   }
   
   func setupColleagueConstraints() {
@@ -334,17 +327,6 @@ class ContactViewController: UIViewController {
     topmostTextField = firstNameTextField
   }
   
-  func setupKeyboardHandling() {
-    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-  }
-  
-  func setupImagePickerController() {
-    //imagePicker.modalPresentationStyle = .fullScreen // in ios 13 default presentation is page sheet
-    imagePicker.delegate = self
-    imagePicker.sourceType = .photoLibrary
-  }
-  
   func setupByRole() {
     guard let role = role else { return }
     switch role {
@@ -359,11 +341,69 @@ class ContactViewController: UIViewController {
     }
   }
   
+  func setupByRelation() {
+    guard let relation = contact?.relation else { return }
+    switch relation {
+    case .colleague:
+      workPhoneTextField.isHidden = false
+      positionTextField.isHidden = false
+      birthdayTextField.isHidden = true
+      
+      setupColleagueConstraints()
+    case .friend:
+      workPhoneTextField.isHidden = true
+      positionTextField.isHidden = true
+      birthdayTextField.isHidden = false
+      
+      setupFriendConstraints()
+    }
+  }
+  
+  func setupKeyboardHandling() {
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+  }
+  
+  func setupDatePicker() {
+    // Formate Date
+    datePicker.datePickerMode = .date
+    //datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -150, to: Date())
+    datePicker.maximumDate = Date()
+    
+    // ToolBar
+    let toolbar = UIToolbar()
+    toolbar.sizeToFit()
+    let cancelButton = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(datePickerCancelButtonTapped))
+    let doneButton = UIBarButtonItem(title: "Выбрать", style: .plain, target: self, action: #selector(datePickerDoneButtonTapped))
+    let space = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
+    toolbar.setItems([cancelButton, space, doneButton], animated: false)
+    
+    birthdayTextField.inputAccessoryView = toolbar
+    birthdayTextField.inputView = datePicker
+  }
+  
+  func setupImagePickerController() {
+    //imagePicker.modalPresentationStyle = .fullScreen // in ios 13 default presentation is page sheet
+    imagePicker.delegate = self
+    imagePicker.sourceType = .photoLibrary
+  }
+  
   // MARK: - Actions
   
   @objc
   func changePhotoButtonTapped() {
     present(imagePicker, animated: true, completion: nil)
+  }
+  
+  @objc
+  func datePickerCancelButtonTapped() {
+    view.endEditing(true)
+  }
+  
+  @objc
+  func datePickerDoneButtonTapped() {
+    birthdayTextField.text = Format.shared.dateFormatter.string(from: datePicker.date)
+    view.endEditing(true)
   }
   
   @objc
