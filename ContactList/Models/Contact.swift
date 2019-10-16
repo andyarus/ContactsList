@@ -8,6 +8,7 @@
 
 import Foundation
 
-struct Contact {
-  let relation: Relation
+enum Contact {
+  case colleague(ColleagueViewModel?)
+  case friend(FriendViewModel?)
 }

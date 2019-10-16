@@ -12,6 +12,8 @@
 		926133C723578FF8008BEC57 /* ControllerRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926133C623578FF8008BEC57 /* ControllerRole.swift */; };
 		926133C92357A7F1008BEC57 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926133C82357A7F1008BEC57 /* UIImage+Extensions.swift */; };
 		926133CD2357B4D1008BEC57 /* AlertChangePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926133CC2357B4D1008BEC57 /* AlertChangePhoto.swift */; };
+		926133D02357C3EA008BEC57 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926133CF2357C3EA008BEC57 /* DatabaseService.swift */; };
+		926133D22357CA75008BEC57 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926133D12357CA75008BEC57 /* Entity.swift */; };
 		92620548235241C600426537 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92620547235241C600426537 /* AppDelegate.swift */; };
 		9262054A235241C600426537 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92620549235241C600426537 /* ContactsViewController.swift */; };
 		92620550235241C600426537 /* ContactList.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9262054E235241C600426537 /* ContactList.xcdatamodeld */; };
@@ -28,7 +30,6 @@
 		927131842353670700844DBD /* DefaultFriends.plist in Resources */ = {isa = PBXBuildFile; fileRef = 927131832353670700844DBD /* DefaultFriends.plist */; };
 		9271318723539B8100844DBD /* Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318623539B8100844DBD /* Format.swift */; };
 		9271318B2353BEB800844DBD /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318A2353BEB800844DBD /* Contact.swift */; };
-		9271318D2353BF3200844DBD /* Relation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318C2353BF3200844DBD /* Relation.swift */; };
 		9271318F2353BF8900844DBD /* ContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9271318E2353BF8900844DBD /* ContactViewModel.swift */; };
 		927131922353C63200844DBD /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131912353C63200844DBD /* UIColor+Extensions.swift */; };
 		927131942353CD8A00844DBD /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131932353CD8A00844DBD /* TextField.swift */; };
@@ -58,6 +59,8 @@
 		926133C623578FF8008BEC57 /* ControllerRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControllerRole.swift; sourceTree = "<group>"; };
 		926133C82357A7F1008BEC57 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		926133CC2357B4D1008BEC57 /* AlertChangePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertChangePhoto.swift; sourceTree = "<group>"; };
+		926133CF2357C3EA008BEC57 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
+		926133D12357CA75008BEC57 /* Entity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
 		92620544235241C600426537 /* ContactList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContactList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92620547235241C600426537 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92620549235241C600426537 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
@@ -80,7 +83,6 @@
 		927131832353670700844DBD /* DefaultFriends.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DefaultFriends.plist; sourceTree = "<group>"; };
 		9271318623539B8100844DBD /* Format.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Format.swift; sourceTree = "<group>"; };
 		9271318A2353BEB800844DBD /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
-		9271318C2353BF3200844DBD /* Relation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Relation.swift; sourceTree = "<group>"; };
 		9271318E2353BF8900844DBD /* ContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewModel.swift; sourceTree = "<group>"; };
 		927131912353C63200844DBD /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		927131932353CD8A00844DBD /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
@@ -112,6 +114,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		926133CE2357C3BC008BEC57 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				926133CF2357C3EA008BEC57 /* DatabaseService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		9262053B235241C600426537 = {
 			isa = PBXGroup;
 			children = (
@@ -140,6 +150,7 @@
 				927131902353C5F700844DBD /* Extensions */,
 				9262057B23524EC700426537 /* Models */,
 				9262057A23524EBA00426537 /* Resources */,
+				926133CE2357C3BC008BEC57 /* Services */,
 				9271317E2353595C00844DBD /* Storyboards */,
 				9271318523539B6C00844DBD /* Utils */,
 				9262057823524E7A00426537 /* View Controllers */,
@@ -201,9 +212,9 @@
 				9262058023524FD600426537 /* Colleague.swift */,
 				926205822352516900426537 /* Friend.swift */,
 				9271318A2353BEB800844DBD /* Contact.swift */,
-				9271318C2353BF3200844DBD /* Relation.swift */,
 				926133C623578FF8008BEC57 /* ControllerRole.swift */,
 				926133CC2357B4D1008BEC57 /* AlertChangePhoto.swift */,
+				926133D12357CA75008BEC57 /* Entity.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -406,11 +417,12 @@
 				926133CD2357B4D1008BEC57 /* AlertChangePhoto.swift in Sources */,
 				9271318B2353BEB800844DBD /* Contact.swift in Sources */,
 				9228360D23555EE7006F4D20 /* Validator.swift in Sources */,
-				9271318D2353BF3200844DBD /* Relation.swift in Sources */,
 				926133C723578FF8008BEC57 /* ControllerRole.swift in Sources */,
 				9271318723539B8100844DBD /* Format.swift in Sources */,
+				926133D02357C3EA008BEC57 /* DatabaseService.swift in Sources */,
 				92620548235241C600426537 /* AppDelegate.swift in Sources */,
 				9262058123524FD600426537 /* Colleague.swift in Sources */,
+				926133D22357CA75008BEC57 /* Entity.swift in Sources */,
 				926133C92357A7F1008BEC57 /* UIImage+Extensions.swift in Sources */,
 				927131922353C63200844DBD /* UIColor+Extensions.swift in Sources */,
 				9271318F2353BF8900844DBD /* ContactViewModel.swift in Sources */,

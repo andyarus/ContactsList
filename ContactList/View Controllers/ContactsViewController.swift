@@ -143,9 +143,9 @@ class ContactsViewController: UIViewController {
     vc.role = .add
     
     if isColleagues {
-      vc.contact = ContactViewModel(contact: Contact(relation: .colleague(nil)))
+      vc.contactViewModel = ContactViewModel(contact: .colleague(nil))
     } else {
-      vc.contact = ContactViewModel(contact: Contact(relation: .friend(nil)))
+      vc.contactViewModel = ContactViewModel(contact: .friend(nil))
     }
     
     navigationController?.pushViewController(vc, animated: true)
@@ -162,9 +162,9 @@ extension ContactsViewController: UITableViewDelegate {
     vc.role = .edit
     
     if isColleagues {
-      vc.contact = ContactViewModel(contact: Contact(relation: .colleague(colleagues[indexPath.row])))
+      vc.contactViewModel = ContactViewModel(contact: .colleague(colleagues[indexPath.row]))
     } else {
-      vc.contact = ContactViewModel(contact: Contact(relation: .friend(friends[indexPath.row])))
+      vc.contactViewModel = ContactViewModel(contact: .friend(friends[indexPath.row]))
     }
     vc.idx = indexPath.row
     
@@ -199,8 +199,8 @@ extension ContactsViewController: UITableViewDataSource {
 
 extension ContactsViewController {
   
-  func updateContact(_ contact: ContactViewModel, in idx: Int) {
-    switch contact.relation {
+  func updateContact(_ contactViewModel: ContactViewModel, in idx: Int) {
+    switch contactViewModel.contact {
     case .colleague(let colleague):
       guard let colleague = colleague else { return }
       colleagues[idx] = colleague
@@ -212,8 +212,8 @@ extension ContactsViewController {
     tableView.reloadData()
   }
   
-  func addContact(_ contact: ContactViewModel) {
-    switch contact.relation {
+  func addContact(_ contactViewModel: ContactViewModel) {
+    switch contactViewModel.contact {
     case .colleague(let colleague):
       guard let colleague = colleague else { return }
       colleagues.append(colleague)

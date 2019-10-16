@@ -9,21 +9,17 @@
 import Foundation
 
 struct ContactViewModel {
-  private let contact: Contact
+  private(set) var contact: Contact
   
   init(contact: Contact) {
     self.contact = contact
-  }
-  
-  var relation: Relation {
-    return contact.relation
   }
 }
 
 extension ContactViewModel {
   
   func configure(_ vc: ContactViewController) {
-    switch contact.relation {
+    switch contact {
     case .colleague(let colleague):
       guard let colleague = colleague else { return }
       vc.photoImageView.image = colleague.photo ?? .defaultPhoto

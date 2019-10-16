@@ -13,7 +13,7 @@ class ContactViewController: UIViewController {
   // MARK: - Properties
   
   open var role: ControllerRole?
-  open var contact: ContactViewModel?
+  open var contactViewModel: ContactViewModel?
   open var idx: Int?
   
   private var datePicker = UIDatePicker()
@@ -331,7 +331,7 @@ class ContactViewController: UIViewController {
     guard let role = role else { return }
     switch role {
     case .edit:
-      contact?.configure(self)
+      contactViewModel?.configure(self)
       
       if photoImageView.image == .defaultPhoto {
         changePhotoButton.setTitle("Добавить фото", for: .normal)
@@ -346,8 +346,8 @@ class ContactViewController: UIViewController {
   }
   
   func setupByRelation() {
-    guard let relation = contact?.relation else { return }
-    switch relation {
+    guard let contact = contactViewModel?.contact else { return }
+    switch contact {
     case .colleague:
       workPhoneTextField.isHidden = false
       positionTextField.isHidden = false
@@ -476,13 +476,13 @@ class ContactViewController: UIViewController {
     }
     
     guard let vc = navigationController?.viewControllers.first as? ContactsViewController,
-      let relation = contact?.relation else {
+      let contact = contactViewModel?.contact else {
         Alert.shared.error(in: self, message: "Что-то пошло не так")
         return
     }
     
-    let updatedRelation: Relation
-    switch relation {
+    let updatedContact: Contact
+    switch contact {
     case .colleague:
       guard let workPhone = workPhoneTextField.text?.trimmingCharacters(in: .whitespaces), !workPhone.isEmpty else {
         Alert.shared.error(in: self, message: "Рабочий телефон не может быть пустой!")
@@ -510,7 +510,7 @@ class ContactViewController: UIViewController {
                                 workPhone: workPhone,
                                 position: position)
       
-      updatedRelation = .colleague(ColleagueViewModel(colleague: colleague))
+      updatedContact = .colleague(ColleagueViewModel(colleague: colleague))
     case .friend:
       guard let birthdayString = birthdayTextField.text?.trimmingCharacters(in: .whitespaces), let birthday = Format.shared.format(toDate: birthdayString) else {
         Alert.shared.error(in: self, message: "Неверный формат даты рождения! Формат должен быть таким:\(Format.shared.format(toString: Date())) (день.месяц.год)")
@@ -528,16 +528,16 @@ class ContactViewController: UIViewController {
                           phone: phone,
                           birthday: birthday)
       
-      updatedRelation = .friend(FriendViewModel(friend: friend))
+      updatedContact = .friend(FriendViewModel(friend: friend))
     }
-    let updatedContact = ContactViewModel(contact: Contact(relation: updatedRelation))
+    let updatedContactViewModel = ContactViewModel(contact: updatedContact)
     
     switch role {
     case .edit:
       guard let idx = idx else { return }
-      vc.updateContact(updatedContact, in: idx)
+      vc.updateContact(updatedContactViewModel, in: idx)
     case .add:
-      vc.addContact(updatedContact)
+      vc.addContact(updatedContactViewModel)
     }
     
     navigationController?.popViewController(animated: true)
@@ -556,9 +556,9 @@ extension ContactViewController: UITextFieldDelegate {
       let lastName = lastNameTextField.text?.trimmingCharacters(in: .whitespaces), !lastName.isEmpty,
       let _ = middleNameTextField.text?.trimmingCharacters(in: .whitespaces),
       let phone = phoneTextField.text?.trimmingCharacters(in: .whitespaces), !phone.isEmpty,
-      let relation = contact?.relation {
+      let contact = contactViewModel?.contact {
       var fillDone = false
-      switch relation {
+      switch contact {
       case .colleague:
         if let workPhone = workPhoneTextField.text?.trimmingCharacters(in: .whitespaces), !workPhone.isEmpty,
           let position = positionTextField.text?.trimmingCharacters(in: .whitespaces), !position.isEmpty {
@@ -583,8 +583,8 @@ extension ContactViewController: UITextFieldDelegate {
     case middleNameTextField:
       phoneTextField.becomeFirstResponder()
     case phoneTextField:
-      guard let relation = contact?.relation else { return false }
-      switch relation {
+      guard let contact = contactViewModel?.contact else { return false }
+      switch contact {
       case .colleague:
         workPhoneTextField.becomeFirstResponder()
       case .friend:
