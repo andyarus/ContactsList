@@ -31,7 +31,7 @@ class Validator {
   }
   
   func isValid(phone: String) -> Bool {
-    return phone.range(of: "^+?[0-9]{1,11}$", options: .regularExpression) != nil
+    return phone.range(of: "^\\+?[0-9]{1,11}$", options: .regularExpression) != nil
   }
   
   func isValid(position: String) -> Bool {

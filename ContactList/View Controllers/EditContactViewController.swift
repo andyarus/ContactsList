@@ -15,6 +15,14 @@ class EditContactViewController: UIViewController {
   var contact: ContactViewModel?
   var idx: Int?
   
+  // keyboard handling
+  var originY: CGFloat?
+  var touchLocation: CGPoint?
+  var textFieldHeight: CGFloat = 0.0
+  var keyboardHeight: CGFloat = 0.0
+  var keyboardShown: Bool = false
+  var topmostTextField: UITextField?
+  
   // MARK: - Subviews
   
   let photoImageView: UIImageView = {
@@ -85,6 +93,85 @@ class EditContactViewController: UIViewController {
     setup()
   }
   
+  // MARK: - Keyboard Show/Hide
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    view.endEditing(true)
+  }
+  
+  @objc
+  func keyboardWillShow(notification: NSNotification) {
+    if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+      if originY == nil {
+        originY = view.frame.origin.y
+      }
+      if let touchLocation = touchLocation, view.frame.height - touchLocation.y - textFieldHeight < keyboardSize.height, view.frame.origin.y == originY {
+        view.frame.origin.y -= keyboardSize.height - (view.frame.height - touchLocation.y) + textFieldHeight
+      }
+      keyboardHeight = keyboardSize.height
+    }
+    keyboardShown = true
+  }
+  
+  @objc
+  func keyboardWillHide(notification: NSNotification) {
+    if keyboardShown {
+      view.frame.origin.y = originY ?? 0.0
+    }
+    keyboardShown = false
+  }
+  
+  // MARK: - TextField Tap Gesture Recognize Methods
+  
+  @objc
+  func firstNameTextFieldTapped(gr: UITapGestureRecognizer) {
+    touchLocation = gr.location(in: view)
+    textFieldHeight = firstNameTextField.frame.height
+    firstNameTextField.becomeFirstResponder()
+  }
+  
+  @objc
+  func lastNameTextFieldTapped(gr: UITapGestureRecognizer) {
+    touchLocation = gr.location(in: view)
+    textFieldHeight = lastNameTextField.frame.height
+    lastNameTextField.becomeFirstResponder()
+  }
+  
+  @objc
+  func middleNameTextFieldTapped(gr: UITapGestureRecognizer) {
+    touchLocation = gr.location(in: view)
+    textFieldHeight = middleNameTextField.frame.height
+    middleNameTextField.becomeFirstResponder()
+  }
+  
+  @objc
+  func phoneTextFieldTapped(gr: UITapGestureRecognizer) {
+    touchLocation = gr.location(in: view)
+    textFieldHeight = phoneTextField.frame.height
+    phoneTextField.becomeFirstResponder()
+  }
+  
+  @objc
+  func workPhoneTextFieldTapped(gr: UITapGestureRecognizer) {
+    touchLocation = gr.location(in: view)
+    textFieldHeight = workPhoneTextField.frame.height
+    workPhoneTextField.becomeFirstResponder()
+  }
+  
+  @objc
+  func positionTextFieldTapped(gr: UITapGestureRecognizer) {
+    touchLocation = gr.location(in: view)
+    textFieldHeight = positionTextField.frame.height
+    positionTextField.becomeFirstResponder()
+  }
+  
+  @objc
+  func birthdayTextFieldTapped(gr: UITapGestureRecognizer) {
+    touchLocation = gr.location(in: view)
+    textFieldHeight = birthdayTextField.frame.height
+    birthdayTextField.becomeFirstResponder()
+  }
+  
   // MARK: - Setup Methods
   
   func setup() {
@@ -93,6 +180,7 @@ class EditContactViewController: UIViewController {
     addSubviews()
     setupConstraints()
     setupTextFields()
+    setupKeyboardHandling()
     
     saveButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(saveButtonTapped)))
     
@@ -175,6 +263,14 @@ class EditContactViewController: UIViewController {
   }
   
   func setupTextFields() {
+    firstNameTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(firstNameTextFieldTapped)))
+    lastNameTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(lastNameTextFieldTapped)))
+    middleNameTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(middleNameTextFieldTapped)))
+    phoneTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(phoneTextFieldTapped)))
+    workPhoneTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(workPhoneTextFieldTapped)))
+    positionTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(positionTextFieldTapped)))
+    birthdayTextField.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(birthdayTextFieldTapped)))
+    
     firstNameTextField.delegate = self
     lastNameTextField.delegate = self
     middleNameTextField.delegate = self
@@ -182,6 +278,13 @@ class EditContactViewController: UIViewController {
     workPhoneTextField.delegate = self
     positionTextField.delegate = self
     birthdayTextField.delegate = self
+    
+    topmostTextField = firstNameTextField
+  }
+  
+  func setupKeyboardHandling() {
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
   }
   
   // MARK: - Actions
@@ -327,7 +430,29 @@ extension EditContactViewController: UITextFieldDelegate {
       textField.resignFirstResponder()
     }
     
+    keyboardReturnPressed(in: textField, isLastTextField: (textField == positionTextField || textField == birthdayTextField))
+    
     return false
+  }
+  
+  // make visible textField by changing view.frame.origin.y
+  func keyboardReturnPressed(in textField: UITextField, isLastTextField: Bool) {
+    guard let lastTouchLocation = touchLocation, let originY = originY else { return }
+    if isLastTextField, let topmostTextField = topmostTextField {
+      // the topmost textField
+      touchLocation = CGPoint(x: lastTouchLocation.x, y: topmostTextField.frame.minY + textFieldHeight/2)
+      if view.frame.origin.y != originY {
+        view.frame.origin.y = originY
+      }
+    } else {
+      // the next textField. 10 - space between textFields
+      touchLocation = CGPoint(x: lastTouchLocation.x, y: lastTouchLocation.y + textFieldHeight + 10)
+    }
+    
+    // check whether the keyboard will hide textField
+    if let touchLocation = touchLocation, view.frame.height - touchLocation.y - textFieldHeight < keyboardHeight {
+      view.frame.origin.y = originY - (keyboardHeight - (view.frame.height - touchLocation.y) + textFieldHeight)
+    }
   }
   
 }

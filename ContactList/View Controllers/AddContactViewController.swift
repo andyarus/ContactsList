@@ -15,10 +15,12 @@ class AddContactViewController: UIViewController {
   var relation: Relation?
   
   // keyboard handling
-  var originY: CGFloat!
-  var touchLocation: CGPoint!
-  var textFieldHeight: CGFloat!
+  var originY: CGFloat?
+  var touchLocation: CGPoint?
+  var textFieldHeight: CGFloat = 0.0
+  var keyboardHeight: CGFloat = 0.0
   var keyboardShown: Bool = false
+  var topmostTextField: UITextField?
   
   // MARK: - Subviews
   
@@ -110,9 +112,10 @@ class AddContactViewController: UIViewController {
       if originY == nil {
         originY = view.frame.origin.y
       }
-      if let touchLocation = touchLocation, view.frame.height - touchLocation.y < keyboardSize.height, view.frame.origin.y == originY {
+      if let touchLocation = touchLocation, view.frame.height - touchLocation.y - textFieldHeight < keyboardSize.height, view.frame.origin.y == originY {
         view.frame.origin.y -= keyboardSize.height - (view.frame.height - touchLocation.y) + textFieldHeight
       }
+      keyboardHeight = keyboardSize.height
     }
     keyboardShown = true
   }
@@ -120,7 +123,7 @@ class AddContactViewController: UIViewController {
   @objc
   func keyboardWillHide(notification: NSNotification) {
     if keyboardShown {
-      view.frame.origin.y = originY
+      view.frame.origin.y = originY ?? 0.0
     }
     keyboardShown = false
   }
@@ -296,6 +299,8 @@ class AddContactViewController: UIViewController {
     workPhoneTextField.delegate = self
     positionTextField.delegate = self
     birthdayTextField.delegate = self
+    
+    topmostTextField = firstNameTextField
   }
   
   func setupKeyboardHandling() {
@@ -470,7 +475,29 @@ extension AddContactViewController: UITextFieldDelegate {
       textField.resignFirstResponder()
     }
     
+    keyboardReturnPressed(in: textField, isLastTextField: (textField == positionTextField || textField == birthdayTextField))
+    
     return false
+  }
+  
+  // make visible textField by changing view.frame.origin.y
+  func keyboardReturnPressed(in textField: UITextField, isLastTextField: Bool) {
+    guard let lastTouchLocation = touchLocation, let originY = originY else { return }
+    if isLastTextField, let topmostTextField = topmostTextField {
+      // the topmost textField
+      touchLocation = CGPoint(x: lastTouchLocation.x, y: topmostTextField.frame.minY + textFieldHeight/2)
+      if view.frame.origin.y != originY {
+        view.frame.origin.y = originY
+      }
+    } else {
+      // the next textField. 10 - space between textFields
+      touchLocation = CGPoint(x: lastTouchLocation.x, y: lastTouchLocation.y + textFieldHeight + 10)
+    }
+    
+    // check whether the keyboard will hide textField
+    if let touchLocation = touchLocation, view.frame.height - touchLocation.y - textFieldHeight < keyboardHeight {
+      view.frame.origin.y = originY - (keyboardHeight - (view.frame.height - touchLocation.y) + textFieldHeight)
+    }
   }
   
 }
