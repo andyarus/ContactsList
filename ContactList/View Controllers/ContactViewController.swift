@@ -331,10 +331,14 @@ class ContactViewController: UIViewController {
     guard let role = role else { return }
     switch role {
     case .edit:
-      changePhotoButton.setTitle("Изменить фото", for: .normal)
-      changeContactButton.setTitle("Изменить", for: .normal)
-      
       contact?.configure(self)
+      
+      if photoImageView.image == .defaultPhoto {
+        changePhotoButton.setTitle("Добавить фото", for: .normal)
+      } else {
+        changePhotoButton.setTitle("Изменить фото", for: .normal)
+      }
+      changeContactButton.setTitle("Сохранить", for: .normal)
     case .add:
       changePhotoButton.setTitle("Добавить фото", for: .normal)
       changeContactButton.setTitle("Добавить", for: .normal)
@@ -365,12 +369,14 @@ class ContactViewController: UIViewController {
   }
   
   func setupDatePicker() {
-    // Formate Date
     datePicker.datePickerMode = .date
-    //datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -150, to: Date())
+    datePicker.minimumDate = Calendar.current.date(byAdding: .year, value: -150, to: Date())
     datePicker.maximumDate = Date()
+    if let isEmpty = birthdayTextField.text?.isEmpty, isEmpty,
+      let date = Calendar.current.date(byAdding: .year, value: -20, to: Date()) {
+      datePicker.setDate(date, animated: true)
+    }
     
-    // ToolBar
     let toolbar = UIToolbar()
     toolbar.sizeToFit()
     let cancelButton = UIBarButtonItem(title: "Отменить", style: .plain, target: self, action: #selector(datePickerCancelButtonTapped))
@@ -392,6 +398,21 @@ class ContactViewController: UIViewController {
   
   @objc
   func changePhotoButtonTapped() {
+    guard photoImageView.image == .defaultPhoto else {
+      Alert.shared.changePhoto(in: self) { [weak self] result in
+        guard let self = self else { return }
+        switch result {
+        case .change:
+          self.present(self.imagePicker, animated: true, completion: nil)
+        case .delete:
+          self.photoImageView.image = .defaultPhoto
+          self.changePhotoButton.setTitle("Добавить фото", for: .normal)
+        }
+      }
+      
+      return
+    }
+    
     present(imagePicker, animated: true, completion: nil)
   }
   
@@ -613,6 +634,8 @@ extension ContactViewController: UINavigationControllerDelegate, UIImagePickerCo
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
     if let image = info[.originalImage] as? UIImage {
       photoImageView.image = image
+      
+      changePhotoButton.setTitle("Изменить фото", for: .normal)
     }
     
     picker.dismiss(animated: true)

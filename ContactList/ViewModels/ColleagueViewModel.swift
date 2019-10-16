@@ -28,7 +28,7 @@ struct ColleagueViewModel {
     return colleague.middleName
   }
   
-  var photo: UIImage {
+  var photo: UIImage? {
     return colleague.photo
   }
   
@@ -55,7 +55,7 @@ struct ColleagueViewModel {
       guard let firstName = dictionary["FirstName"],
         let lastName = dictionary["LastName"],
         let middleName = dictionary["MiddleName"],
-        let photoName = dictionary["Photo"], let photo = UIImage(named: photoName),
+        let photoName = dictionary["Photo"],
         let phone = dictionary["Phone"],
         let workPhone = dictionary["WorkPhone"],
         let position = dictionary["Position"] else {
@@ -65,7 +65,7 @@ struct ColleagueViewModel {
       let colleague = Colleague(firstName: firstName,
                                 lastName: lastName,
                                 middleName: middleName,
-                                photo: photo,
+                                photo: UIImage(named: photoName),
                                 phone: phone,
                                 workPhone: workPhone,
                                 position: position)
@@ -85,7 +85,7 @@ struct ColleagueViewModel {
 extension ColleagueViewModel {
   
   func configure(_ cell: ContactCell) {
-    cell.photoImageView.image = photo
+    cell.photoImageView.image = photo ?? .defaultPhoto
     
     var fullName = firstName
     if let middleName = middleName, !middleName.isEmpty {

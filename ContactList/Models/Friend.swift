@@ -13,7 +13,7 @@ struct Friend {
   let firstName: String
   let lastName: String
   let middleName: String?
-  let photo: UIImage
-  let phone: String  
+  let photo: UIImage?
+  let phone: String
   let birthday: Date
 }

@@ -153,6 +153,26 @@ class ContactsViewController: UIViewController {
   
 }
 
+// MARK: - UITableViewDelegate
+
+extension ContactsViewController: UITableViewDelegate {
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    let vc = ContactViewController()
+    vc.role = .edit
+    
+    if isColleagues {
+      vc.contact = ContactViewModel(contact: Contact(relation: .colleague(colleagues[indexPath.row])))
+    } else {
+      vc.contact = ContactViewModel(contact: Contact(relation: .friend(friends[indexPath.row])))
+    }
+    vc.idx = indexPath.row
+    
+    navigationController?.pushViewController(vc, animated: true)
+  }
+  
+}
+
 // MARK: - UITableViewDataSource
 
 extension ContactsViewController: UITableViewDataSource {
@@ -171,26 +191,6 @@ extension ContactsViewController: UITableViewDataSource {
     }
     
     return cell
-  }
-  
-}
-
-// MARK: - UITableViewDelegate
-
-extension ContactsViewController: UITableViewDelegate {
-  
-  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let vc = ContactViewController()
-    vc.role = .edit
-    
-    if isColleagues {
-      vc.contact = ContactViewModel(contact: Contact(relation: .colleague(colleagues[indexPath.row])))
-    } else {
-      vc.contact = ContactViewModel(contact: Contact(relation: .friend(friends[indexPath.row])))
-    }
-    vc.idx = indexPath.row
-    
-    navigationController?.pushViewController(vc, animated: true)
   }
   
 }

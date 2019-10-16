@@ -26,7 +26,7 @@ extension ContactViewModel {
     switch contact.relation {
     case .colleague(let colleague):
       guard let colleague = colleague else { return }
-      vc.photoImageView.image = colleague.photo
+      vc.photoImageView.image = colleague.photo ?? .defaultPhoto
       vc.firstNameTextField.text = colleague.firstName
       vc.lastNameTextField.text = colleague.lastName
       vc.middleNameTextField.text = colleague.middleName      
@@ -41,7 +41,7 @@ extension ContactViewModel {
       vc.setupColleagueConstraints()
     case .friend(let friend):
       guard let friend = friend else { return }
-      vc.photoImageView.image = friend.photo
+      vc.photoImageView.image = friend.photo ?? .defaultPhoto
       vc.firstNameTextField.text = friend.firstName
       vc.lastNameTextField.text = friend.lastName
       vc.middleNameTextField.text = friend.middleName

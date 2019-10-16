@@ -28,7 +28,7 @@ struct FriendViewModel {
     return friend.middleName
   }
   
-  var photo: UIImage {
+  var photo: UIImage? {
     return friend.photo
   }
   
@@ -51,7 +51,7 @@ struct FriendViewModel {
       guard let firstName = dictionary["FirstName"],
         let lastName = dictionary["LastName"],
         let middleName = dictionary["MiddleName"],
-        let photoName = dictionary["Photo"], let photo = UIImage(named: photoName),
+        let photoName = dictionary["Photo"],
         let phone = dictionary["Phone"],
         let birthdayString = dictionary["Birthday"], let birthday = Format.shared.format(toDate: birthdayString) else {
           continue
@@ -60,7 +60,7 @@ struct FriendViewModel {
       let friend = Friend(firstName: firstName,
                              lastName: lastName,
                              middleName: middleName,
-                             photo: photo,
+                             photo: UIImage(named: photoName),
                              phone: phone,
                              birthday: birthday)
       
@@ -79,7 +79,7 @@ struct FriendViewModel {
 extension FriendViewModel {
   
   func configure(_ cell: ContactCell) {
-    cell.photoImageView.image = photo
+    cell.photoImageView.image = photo ?? .defaultPhoto
     
     var fullName = firstName
     if let middleName = middleName, !middleName.isEmpty {

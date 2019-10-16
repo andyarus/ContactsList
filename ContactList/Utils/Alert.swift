@@ -30,4 +30,21 @@ class Alert {
     view.present(alert, animated: true, completion: nil)
   }
   
+  func changePhoto(in view: UIViewController, message: String? = nil, title: String? = nil, completion: @escaping (AlertChangePhoto) -> Void) {
+    let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    let changeAction = UIAlertAction(title: "Изменить", style: .default) { _ in
+      completion(.change)
+    }
+    let deleteAction = UIAlertAction(title: "Удалить", style: .destructive) { _ in
+      completion(.delete)
+    }
+    let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
+    
+    alertController.addAction(changeAction)
+    alertController.addAction(deleteAction)
+    alertController.addAction(cancelAction)
+    
+    view.present(alertController, animated: true, completion: nil)
+  }
+  
 }

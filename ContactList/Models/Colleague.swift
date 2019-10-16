@@ -13,7 +13,7 @@ struct Colleague {
   let firstName: String
   let lastName: String
   let middleName: String?
-  let photo: UIImage
+  let photo: UIImage?
   let phone: String  
   let workPhone: String
   let position: String  
