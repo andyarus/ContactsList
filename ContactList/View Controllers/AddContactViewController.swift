@@ -13,8 +13,10 @@ class AddContactViewController: UIViewController {
   // MARK: - Properties
   
   var relation: Relation?
+  var imagePicker = UIImagePickerController()
   
-  // keyboard handling
+  // MARK: - Keyboard Show/Hide Handling
+  
   var originY: CGFloat?
   var touchLocation: CGPoint?
   var textFieldHeight: CGFloat = 0.0
@@ -26,12 +28,23 @@ class AddContactViewController: UIViewController {
   
   let photoImageView: UIImageView = {
     let imageView = UIImageView()
+    imageView.isUserInteractionEnabled = true
     imageView.translatesAutoresizingMaskIntoConstraints = false
     imageView.contentMode = .scaleAspectFill
     imageView.layer.masksToBounds = true
     imageView.layer.cornerRadius = 23.0
-    imageView.image = UIImage(named: "profilePlaceholder")
+    imageView.image = UIImage(named: "profilePlaceholder")    
     return imageView
+  }()
+  
+  let changePhotoButton: UIButton = {
+    let button = UIButton()
+    button.translatesAutoresizingMaskIntoConstraints = false
+    button.setTitle("Добавить фото", for: .normal)
+    button.setTitleColor(.blue, for: .normal)
+    button.titleLabel?.font = .systemFont(ofSize: 10)
+    
+    return button
   }()
   
   let firstNameTextField: TextField = {
@@ -182,34 +195,23 @@ class AddContactViewController: UIViewController {
   // MARK: - Setup Methods
   
   func setup() {
+    setupUI()
+    setupKeyboardHandling()
+    setupImagePickerController()
+  }
+  
+  func setupUI() {
     view.backgroundColor = .white
     
     addSubviews()
+    setupGestureRecognizers()
     setupConstraints()
     setupTextFields()
-    setupKeyboardHandling()
-    
-    addButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(addButtonTapped)))
-    
-    guard let relation = relation else { return }    
-    switch relation {
-    case .colleague:
-      workPhoneTextField.isHidden = false
-      positionTextField.isHidden = false
-      birthdayTextField.isHidden = true
-      
-      setupColleagueConstraints()
-    case .friend:
-      workPhoneTextField.isHidden = true
-      positionTextField.isHidden = true
-      birthdayTextField.isHidden = false
-      
-      setupFriendConstraints()
-    }
   }
   
   func addSubviews() {
     view.addSubview(photoImageView)
+    view.addSubview(changePhotoButton)
     view.addSubview(firstNameTextField)
     view.addSubview(lastNameTextField)
     view.addSubview(middleNameTextField)
@@ -220,15 +222,26 @@ class AddContactViewController: UIViewController {
     view.addSubview(addButton)
   }
   
+  func setupGestureRecognizers() {
+    photoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changePhotoButtonTapped)))
+    changePhotoButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changePhotoButtonTapped)))
+    addButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(addButtonTapped)))
+  }
+  
   func setupConstraints() {
     NSLayoutConstraint.activate([
       photoImageView.widthAnchor.constraint(equalToConstant: 146.0),
       photoImageView.heightAnchor.constraint(equalToConstant: 146.0),
-      photoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100.0),
+      photoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 80.0),
       photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
       
+      changePhotoButton.widthAnchor.constraint(equalToConstant: 100.0),
+      changePhotoButton.heightAnchor.constraint(equalToConstant: 30.0),
+      changePhotoButton.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 0.0),
+      changePhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      
       firstNameTextField.heightAnchor.constraint(equalToConstant: 30.0),
-      firstNameTextField.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 20.0),
+      firstNameTextField.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 30.0),
       firstNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
       firstNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0),
       
@@ -267,6 +280,22 @@ class AddContactViewController: UIViewController {
       //addButton.topAnchor.constraint(equalTo: birthdayTextField.bottomAnchor, constant: 30.0),
       addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
       ])
+    
+    guard let relation = relation else { return }
+    switch relation {
+    case .colleague:
+      workPhoneTextField.isHidden = false
+      positionTextField.isHidden = false
+      birthdayTextField.isHidden = true
+      
+      setupColleagueConstraints()
+    case .friend:
+      workPhoneTextField.isHidden = true
+      positionTextField.isHidden = true
+      birthdayTextField.isHidden = false
+      
+      setupFriendConstraints()
+    }
   }
   
   func setupColleagueConstraints() {
@@ -308,7 +337,18 @@ class AddContactViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
   }
   
+  func setupImagePickerController() {
+    //imagePicker.modalPresentationStyle = .fullScreen // in ios 13 default presentation is page sheet
+    imagePicker.delegate = self
+    imagePicker.sourceType = .photoLibrary
+  }
+  
   // MARK: - Actions
+  
+  @objc
+  func changePhotoButtonTapped() {
+    present(imagePicker, animated: true, completion: nil)
+  }
   
   @objc
   func addButtonTapped() {
@@ -500,4 +540,18 @@ extension AddContactViewController: UITextFieldDelegate {
     }
   }
   
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension EditContactViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+  
+  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    if let image = info[.originalImage] as? UIImage {
+      photoImageView.image = image
+    }
+    
+    picker.dismiss(animated: true)
+  }
+
 }

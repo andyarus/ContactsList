@@ -14,8 +14,10 @@ class EditContactViewController: UIViewController {
   
   var contact: ContactViewModel?
   var idx: Int?
+  var imagePicker = UIImagePickerController()
   
-  // keyboard handling
+  // MARK: - Keyboard Show/Hide Handling
+  
   var originY: CGFloat?
   var touchLocation: CGPoint?
   var textFieldHeight: CGFloat = 0.0
@@ -27,11 +29,22 @@ class EditContactViewController: UIViewController {
   
   let photoImageView: UIImageView = {
     let imageView = UIImageView()
+    imageView.isUserInteractionEnabled = true
     imageView.translatesAutoresizingMaskIntoConstraints = false
     imageView.contentMode = .scaleAspectFill
     imageView.layer.masksToBounds = true
     imageView.layer.cornerRadius = 23.0
     return imageView
+  }()
+  
+  let changePhotoButton: UIButton = {
+    let button = UIButton()
+    button.translatesAutoresizingMaskIntoConstraints = false
+    button.setTitle("Изменить фото", for: .normal)
+    button.setTitleColor(.blue, for: .normal)
+    button.titleLabel?.font = .systemFont(ofSize: 10)
+    
+    return button
   }()
   
   let firstNameTextField: TextField = {
@@ -175,20 +188,25 @@ class EditContactViewController: UIViewController {
   // MARK: - Setup Methods
   
   func setup() {
-    view.backgroundColor = .white
-    
-    addSubviews()
-    setupConstraints()
-    setupTextFields()
+    setupUI()
     setupKeyboardHandling()
-    
-    saveButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(saveButtonTapped)))
+    setupImagePickerController()
     
     contact?.configure(self)
   }
   
+  func setupUI() {
+    view.backgroundColor = .white
+    
+    addSubviews()
+    setupGestureRecognizers()
+    setupConstraints()
+    setupTextFields()
+  }
+  
   func addSubviews() {
     view.addSubview(photoImageView)
+    view.addSubview(changePhotoButton)
     view.addSubview(firstNameTextField)
     view.addSubview(lastNameTextField)
     view.addSubview(middleNameTextField)
@@ -199,15 +217,26 @@ class EditContactViewController: UIViewController {
     view.addSubview(saveButton)
   }
   
+  func setupGestureRecognizers() {
+    photoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changePhotoButtonTapped)))
+    changePhotoButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changePhotoButtonTapped)))
+    saveButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(saveButtonTapped)))
+  }
+  
   func setupConstraints() {
     NSLayoutConstraint.activate([
       photoImageView.widthAnchor.constraint(equalToConstant: 146.0),
       photoImageView.heightAnchor.constraint(equalToConstant: 146.0),
-      photoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100.0),
+      photoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 80.0),
       photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
       
+      changePhotoButton.widthAnchor.constraint(equalToConstant: 100.0),
+      changePhotoButton.heightAnchor.constraint(equalToConstant: 30.0),
+      changePhotoButton.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 0.0),
+      changePhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      
       firstNameTextField.heightAnchor.constraint(equalToConstant: 30.0),
-      firstNameTextField.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 20.0),
+      firstNameTextField.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 30.0),
       firstNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
       firstNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0),
       
@@ -287,7 +316,18 @@ class EditContactViewController: UIViewController {
     NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
   }
   
+  func setupImagePickerController() {
+    //imagePicker.modalPresentationStyle = .fullScreen // in ios 13 default presentation is page sheet
+    imagePicker.delegate = self
+    imagePicker.sourceType = .photoLibrary
+  }
+  
   // MARK: - Actions
+  
+  @objc
+  func changePhotoButtonTapped() {
+    present(imagePicker, animated: true, completion: nil)
+  }
   
   @objc
   func saveButtonTapped() {
@@ -453,6 +493,20 @@ extension EditContactViewController: UITextFieldDelegate {
     if let touchLocation = touchLocation, view.frame.height - touchLocation.y - textFieldHeight < keyboardHeight {
       view.frame.origin.y = originY - (keyboardHeight - (view.frame.height - touchLocation.y) + textFieldHeight)
     }
+  }
+  
+}
+
+// MARK: - UIImagePickerControllerDelegate
+
+extension AddContactViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+  
+  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    if let image = info[.originalImage] as? UIImage {
+      photoImageView.image = image
+    }
+    
+    picker.dismiss(animated: true)
   }
   
 }
