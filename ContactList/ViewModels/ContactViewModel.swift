@@ -22,7 +22,7 @@ struct ContactViewModel {
 
 extension ContactViewModel {
   
-  func configure(_ vc: EditContactViewController) {
+  func configure(_ vc: ContactViewController) {
     switch contact.relation {
     case .colleague(let colleague):
       guard let colleague = colleague else { return }

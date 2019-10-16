@@ -1,29 +1,31 @@
 //
-//  EditContactViewController.swift
+//  ContactViewController.swift
 //  ContactList
 //
-//  Created by Andrei Coder on 14/10/2019.
+//  Created by Andrei Coder on 16/10/2019.
 //  Copyright © 2019 yaav. All rights reserved.
 //
 
 import UIKit
 
-class EditContactViewController: UIViewController {
-
+class ContactViewController: UIViewController {
+  
   // MARK: - Properties
   
-  var contact: ContactViewModel?
-  var idx: Int?
-  var imagePicker = UIImagePickerController()
+  open var role: ControllerRole?
+  open var contact: ContactViewModel?
+  open var idx: Int?
+  
+  private var imagePicker = UIImagePickerController()
   
   // MARK: - Keyboard Show/Hide Handling
   
-  var originY: CGFloat?
-  var touchLocation: CGPoint?
-  var textFieldHeight: CGFloat = 0.0
-  var keyboardHeight: CGFloat = 0.0
-  var keyboardShown: Bool = false
-  var topmostTextField: UITextField?
+  private var originY: CGFloat?
+  private var touchLocation: CGPoint?
+  private var textFieldHeight: CGFloat = 0.0
+  private var keyboardHeight: CGFloat = 0.0
+  private var keyboardShown: Bool = false
+  private var topmostTextField: UITextField?
   
   // MARK: - Subviews
   
@@ -34,13 +36,13 @@ class EditContactViewController: UIViewController {
     imageView.contentMode = .scaleAspectFill
     imageView.layer.masksToBounds = true
     imageView.layer.cornerRadius = 23.0
+    imageView.image = UIImage(named: "profilePlaceholder")
     return imageView
   }()
   
   let changePhotoButton: UIButton = {
     let button = UIButton()
     button.translatesAutoresizingMaskIntoConstraints = false
-    button.setTitle("Изменить фото", for: .normal)
     button.setTitleColor(.blue, for: .normal)
     button.titleLabel?.font = .systemFont(ofSize: 10)
     
@@ -52,29 +54,30 @@ class EditContactViewController: UIViewController {
     textField.placeholder = "Имя"
     return textField
   }()
-
+  
   let lastNameTextField: TextField = {
     let textField = TextField()
     textField.placeholder = "Фамилия"
     return textField
   }()
-
+  
   let middleNameTextField: TextField = {
     let textField = TextField()
     textField.placeholder = "Отчество"
     return textField
   }()
-
+  
   let phoneTextField: TextField = {
     let textField = TextField()
     textField.placeholder = "Телефон"
     textField.keyboardType = .phonePad
     return textField
   }()
-
+  
   let workPhoneTextField: TextField = {
     let textField = TextField()
     textField.placeholder = "Рабочий телефон"
+    textField.keyboardType = .phonePad
     return textField
   }()
   
@@ -90,14 +93,19 @@ class EditContactViewController: UIViewController {
     return textField
   }()
   
-  let saveButton: UIButton = {
+  let changeContactButton: UIButton = {
     let button = UIButton()
     button.translatesAutoresizingMaskIntoConstraints = false
-    button.setTitle("Сохранить", for: .normal)
     button.setTitleColor(.blue, for: .normal)
     return button
   }()
-
+  
+  // MARK: - Deinitializer
+  
+  deinit {
+    NotificationCenter.default.removeObserver(self)
+  }
+  
   // MARK: - View Lifecycle
   
   override func viewDidLoad() {
@@ -191,8 +199,7 @@ class EditContactViewController: UIViewController {
     setupUI()
     setupKeyboardHandling()
     setupImagePickerController()
-    
-    contact?.configure(self)
+    setupByRole()
   }
   
   func setupUI() {
@@ -214,20 +221,20 @@ class EditContactViewController: UIViewController {
     view.addSubview(workPhoneTextField)
     view.addSubview(positionTextField)
     view.addSubview(birthdayTextField)
-    view.addSubview(saveButton)
+    view.addSubview(changeContactButton)
   }
   
   func setupGestureRecognizers() {
     photoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changePhotoButtonTapped)))
     changePhotoButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changePhotoButtonTapped)))
-    saveButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(saveButtonTapped)))
+    changeContactButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changeContactButtonTapped)))
   }
   
   func setupConstraints() {
     NSLayoutConstraint.activate([
       photoImageView.widthAnchor.constraint(equalToConstant: 146.0),
       photoImageView.heightAnchor.constraint(equalToConstant: 146.0),
-      photoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 80.0),
+      photoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 95.0),
       photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
       
       changePhotoButton.widthAnchor.constraint(equalToConstant: 100.0),
@@ -270,24 +277,40 @@ class EditContactViewController: UIViewController {
       birthdayTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.0),
       birthdayTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.0),
       
-      saveButton.widthAnchor.constraint(equalToConstant: 100.0),
-      saveButton.heightAnchor.constraint(equalToConstant: 40.0),
-      //saveButton.topAnchor.constraint(equalTo: birthdayTextField.bottomAnchor, constant: 30.0),
-      saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+      changeContactButton.widthAnchor.constraint(equalToConstant: 100.0),
+      changeContactButton.heightAnchor.constraint(equalToConstant: 40.0),
+      //changeContactButton.topAnchor.constraint(equalTo: birthdayTextField.bottomAnchor, constant: 30.0),
+      changeContactButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
       ])
+    
+    guard let relation = contact?.relation else { return }
+    switch relation {
+    case .colleague:
+      workPhoneTextField.isHidden = false
+      positionTextField.isHidden = false
+      birthdayTextField.isHidden = true
+      
+      setupColleagueConstraints()
+    case .friend:
+      workPhoneTextField.isHidden = true
+      positionTextField.isHidden = true
+      birthdayTextField.isHidden = false
+      
+      setupFriendConstraints()
+    }
   }
   
   func setupColleagueConstraints() {
     NSLayoutConstraint.activate([
       birthdayTextField.topAnchor.constraint(equalTo: positionTextField.bottomAnchor, constant: 10.0),
-      saveButton.topAnchor.constraint(equalTo: positionTextField.bottomAnchor, constant: 30.0)
+      changeContactButton.topAnchor.constraint(equalTo: positionTextField.bottomAnchor, constant: 30.0)
       ])
   }
   
   func setupFriendConstraints() {
     NSLayoutConstraint.activate([
       birthdayTextField.topAnchor.constraint(equalTo: phoneTextField.bottomAnchor, constant: 10.0),
-      saveButton.topAnchor.constraint(equalTo: birthdayTextField.bottomAnchor, constant: 30.0)
+      changeContactButton.topAnchor.constraint(equalTo: birthdayTextField.bottomAnchor, constant: 30.0)
       ])
   }
   
@@ -322,6 +345,20 @@ class EditContactViewController: UIViewController {
     imagePicker.sourceType = .photoLibrary
   }
   
+  func setupByRole() {
+    guard let role = role else { return }
+    switch role {
+    case .edit:
+      changePhotoButton.setTitle("Изменить фото", for: .normal)
+      changeContactButton.setTitle("Изменить", for: .normal)
+      
+      contact?.configure(self)
+    case .add:
+      changePhotoButton.setTitle("Добавить фото", for: .normal)
+      changeContactButton.setTitle("Добавить", for: .normal)
+    }
+  }
+  
   // MARK: - Actions
   
   @objc
@@ -330,7 +367,9 @@ class EditContactViewController: UIViewController {
   }
   
   @objc
-  func saveButtonTapped() {
+  func changeContactButtonTapped() {
+    guard let role = role else { return }
+    
     // firstName validation
     guard let firstName = firstNameTextField.text?.trimmingCharacters(in: .whitespaces), !firstName.isEmpty else {
       Alert.shared.error(in: self, message: "Имя не может быть пустым!")
@@ -376,11 +415,10 @@ class EditContactViewController: UIViewController {
     }
     
     guard let vc = navigationController?.viewControllers.first as? ContactsViewController,
-      let idx = idx,
       let relation = contact?.relation else {
         Alert.shared.error(in: self, message: "Что-то пошло не так")
         return
-      }
+    }
     
     let updatedRelation: Relation
     switch relation {
@@ -423,17 +461,23 @@ class EditContactViewController: UIViewController {
       }
       
       let friend = Friend(firstName: firstName,
-                                lastName: lastName,
-                                middleName: middleName,
-                                photo: photo,
-                                phone: phone,
-                                birthday: birthday)
+                          lastName: lastName,
+                          middleName: middleName,
+                          photo: photo,
+                          phone: phone,
+                          birthday: birthday)
       
       updatedRelation = .friend(FriendViewModel(friend: friend))
     }
     let updatedContact = ContactViewModel(contact: Contact(relation: updatedRelation))
-
-    vc.updateContact(updatedContact, in: idx)
+    
+    switch role {
+    case .edit:
+      guard let idx = idx else { return }
+      vc.updateContact(updatedContact, in: idx)
+    case .add:
+      vc.addContact(updatedContact)
+    }
     
     navigationController?.popViewController(animated: true)
   }
@@ -442,9 +486,34 @@ class EditContactViewController: UIViewController {
 
 // MARK: - UITextFieldDelegate
 
-extension EditContactViewController: UITextFieldDelegate {
+extension ContactViewController: UITextFieldDelegate {
   
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    
+    // process on filled
+    if let firstName = firstNameTextField.text?.trimmingCharacters(in: .whitespaces), !firstName.isEmpty,
+      let lastName = lastNameTextField.text?.trimmingCharacters(in: .whitespaces), !lastName.isEmpty,
+      let _ = middleNameTextField.text?.trimmingCharacters(in: .whitespaces),
+      let phone = phoneTextField.text?.trimmingCharacters(in: .whitespaces), !phone.isEmpty,
+      let relation = contact?.relation {
+      var fillDone = false
+      switch relation {
+      case .colleague:
+        if let workPhone = workPhoneTextField.text?.trimmingCharacters(in: .whitespaces), !workPhone.isEmpty,
+          let position = positionTextField.text?.trimmingCharacters(in: .whitespaces), !position.isEmpty {
+          fillDone = true
+        }
+      case .friend:
+        if let birthdayString = birthdayTextField.text?.trimmingCharacters(in: .whitespaces), !birthdayString.isEmpty {
+          fillDone = true
+        }
+      }
+      if fillDone {
+        changeContactButtonTapped()
+        return false
+      }
+    }
+    
     switch textField {
     case firstNameTextField:
       lastNameTextField.becomeFirstResponder()
@@ -499,7 +568,7 @@ extension EditContactViewController: UITextFieldDelegate {
 
 // MARK: - UIImagePickerControllerDelegate
 
-extension AddContactViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+extension ContactViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
   
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
     if let image = info[.originalImage] as? UIImage {

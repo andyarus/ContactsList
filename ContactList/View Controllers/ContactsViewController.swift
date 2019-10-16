@@ -139,12 +139,13 @@ class ContactsViewController: UIViewController {
   
   @objc
   func addContactButtonTapped() {
-    let vc = AddContactViewController()
+    let vc = ContactViewController()
+    vc.role = .add
     
     if isColleagues {
-      vc.relation = .colleague(nil)
+      vc.contact = ContactViewModel(contact: Contact(relation: .colleague(nil)))
     } else {
-      vc.relation = .friend(nil)
+      vc.contact = ContactViewModel(contact: Contact(relation: .friend(nil)))
     }
     
     navigationController?.pushViewController(vc, animated: true)
@@ -179,15 +180,14 @@ extension ContactsViewController: UITableViewDataSource {
 extension ContactsViewController: UITableViewDelegate {
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    let vc = EditContactViewController()
+    let vc = ContactViewController()
+    vc.role = .edit
     
-    let relation: Relation    
     if isColleagues {
-      relation = .colleague(colleagues[indexPath.row])
+      vc.contact = ContactViewModel(contact: Contact(relation: .colleague(colleagues[indexPath.row])))
     } else {
-      relation = .friend(friends[indexPath.row])
+      vc.contact = ContactViewModel(contact: Contact(relation: .friend(friends[indexPath.row])))
     }
-    vc.contact = ContactViewModel(contact: Contact(relation: relation))
     vc.idx = indexPath.row
     
     navigationController?.pushViewController(vc, animated: true)
