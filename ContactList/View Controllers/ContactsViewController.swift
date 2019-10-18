@@ -76,6 +76,9 @@ class ContactsViewController: UIViewController {
     tableView.dataSource = self
     tableView.register(ContactCell.self, forCellReuseIdentifier: ContactCell.reuseIdentifier)
     tableView.rowHeight = 69.0
+
+    // TODO iPad customization: UIDevice.isIPad ? :
+    //tableView.rowHeight = UIDevice.isIPad ? 169.0 : 69.0
   }
   
   func setupConstraints() {
@@ -86,6 +89,9 @@ class ContactsViewController: UIViewController {
     colleaguesButton.translatesAutoresizingMaskIntoConstraints = false
     friendsButton.translatesAutoresizingMaskIntoConstraints = false
     tableView.translatesAutoresizingMaskIntoConstraints = false
+    
+    // TODO iPad customization: UIDevice.isIPad ? :
+    // add different sizes
     
     NSLayoutConstraint.activate([
       colleaguesButton.heightAnchor.constraint(equalToConstant: 40),

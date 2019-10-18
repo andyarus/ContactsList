@@ -240,9 +240,13 @@ class ContactViewController: UIViewController {
   }
   
   func setupConstraints() {
+    let photoImageViewSize = CGSize(width: UIDevice.isIPad ? 346.0 : 146.0, height: UIDevice.isIPad ? 346.0 : 146.0)
+    // TODO iPad customization: UIDevice.isIPad ? :
+    // add more different sizes    
+    
     NSLayoutConstraint.activate([
-      photoImageView.widthAnchor.constraint(equalToConstant: 146.0),
-      photoImageView.heightAnchor.constraint(equalToConstant: 146.0),
+      photoImageView.widthAnchor.constraint(equalToConstant: photoImageViewSize.width),
+      photoImageView.heightAnchor.constraint(equalToConstant: photoImageViewSize.height),
       photoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 95.0),
       photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
       

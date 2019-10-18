@@ -36,6 +36,7 @@
 		927131962353E03C00844DBD /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131952353E03C00844DBD /* Alert.swift */; };
 		92D4811D2358F83D0085C913 /* DatabaseServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D4811C2358F83D0085C913 /* DatabaseServiceProtocol.swift */; };
 		92D48121235925000085C913 /* Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D48120235925000085C913 /* Contacts.swift */; };
+		C4E6513D2359BC33007EE594 /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E6513C2359BC33007EE594 /* UIDevice+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		927131952353E03C00844DBD /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		92D4811C2358F83D0085C913 /* DatabaseServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceProtocol.swift; sourceTree = "<group>"; };
 		92D48120235925000085C913 /* Contacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contacts.swift; sourceTree = "<group>"; };
+		C4E6513C2359BC33007EE594 /* UIDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +277,7 @@
 			children = (
 				927131912353C63200844DBD /* UIColor+Extensions.swift */,
 				926133C82357A7F1008BEC57 /* UIImage+Extensions.swift */,
+				C4E6513C2359BC33007EE594 /* UIDevice+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 				926133C523578EA6008BEC57 /* ContactViewController.swift in Sources */,
 				92620550235241C600426537 /* ContactList.xcdatamodeld in Sources */,
 				927131942353CD8A00844DBD /* TextField.swift in Sources */,
+				C4E6513D2359BC33007EE594 /* UIDevice+Extensions.swift in Sources */,
 				927131962353E03C00844DBD /* Alert.swift in Sources */,
 				9262058723525B1C00426537 /* FriendViewModel.swift in Sources */,
 				9262058523525B0E00426537 /* ColleagueViewModel.swift in Sources */,
