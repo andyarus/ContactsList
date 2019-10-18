@@ -56,9 +56,6 @@ class DatabaseService: DatabaseServiceProtocol {
     let managedContext = appDelegate.persistentContainer.viewContext
     
     let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entity.name())
-//    fetchRequest.fetchLimit = 1
-//    fetchRequest.predicate = NSPredicate(format: "phone = %@", "911")
-//    fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "firstName", ascending: false)]
 
     var entities: [Entity] = []
     var retrievedEntity: Entity
@@ -205,7 +202,7 @@ class DatabaseService: DatabaseServiceProtocol {
         managedObject.setValue(friend.lastName, forKeyPath: "lastName")
         managedObject.setValue(friend.middleName, forKeyPath: "middleName")
         managedObject.setValue(friend.phone, forKeyPath: "phone")
-        managedObject.setValue(friend.birthday, forKeyPath: "birthday")        
+        managedObject.setValue(friend.birthday, forKeyPath: "birthday")
         let photo = friend.photo != .defaultPhoto ? friend.photo?.jpegData(compressionQuality: 1.0) : nil
         managedObject.setValue(photo, forKeyPath: "photo")
       }
