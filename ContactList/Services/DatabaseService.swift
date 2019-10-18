@@ -125,7 +125,7 @@ class DatabaseService: DatabaseServiceProtocol {
     fetchRequest.predicate = NSPredicate(format: "phone = %@", key)
     
     do {
-      let result = try managedContext.fetch(fetchRequest)
+      let result = try managedContext.fetch(fetchRequest)      
       guard let managedObjects = result as? [NSManagedObject],
         let managedObject = managedObjects.first else { return nil }
 

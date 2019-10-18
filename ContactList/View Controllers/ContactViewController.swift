@@ -487,12 +487,23 @@ class ContactViewController: UIViewController {
       return
     }
     
+    var checkPhoneUniqueness = false
+    switch role {
+    case .edit:
+      // check only if the phone is changed
+      if Format.shared.clear(phone: phone) != key {
+        checkPhoneUniqueness = true
+      }
+    case .add:
+      checkPhoneUniqueness = true
+    }
+    
     let updatedContact: Contact
     switch contactViewModel.contact {
     case .colleague:
-      // colleague phone uniqueness check; check only if the phone is changed
-      if Format.shared.clear(phone: phone) != key,
-        let _ = contactViewModel.exists(with: phone) {
+      // colleague phone uniqueness check;
+      if checkPhoneUniqueness,
+        let _ = contactViewModel.exists(with: Format.shared.clear(phone: phone)) {
         Alert.shared.error(in: self, message: "Контакт (коллега) с таким номером уже существует!")
         return
       }
@@ -526,8 +537,8 @@ class ContactViewController: UIViewController {
       
       updatedContact = .colleague(ColleagueViewModel(colleague: colleague))
     case .friend:
-      // friend phone uniqueness check; check only if the phone is changed
-      if Format.shared.clear(phone: phone) != key,
+      // friend phone uniqueness check
+      if checkPhoneUniqueness,
         let _ = contactViewModel.exists(with: phone) {
         Alert.shared.error(in: self, message: "Контакт (друг) с таким номером уже существует!")
         return
