@@ -20,9 +20,6 @@ class Format {
   
   func format(phone: String) -> String {
     var phone = phone
-    if phone.starts(with: "8") {
-      phone = "+7\(phone.dropFirst())"
-    }
     phone = "тел: \(phone)"
     
     return phone

@@ -16,4 +16,5 @@ struct Friend {
   let photo: UIImage?
   let phone: String
   let birthday: Date
+  var key: String
 }

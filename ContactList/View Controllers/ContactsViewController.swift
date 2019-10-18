@@ -12,8 +12,7 @@ class ContactsViewController: UIViewController {
   
   // MARK: - Properties
   
-  private var colleagues: [ColleagueViewModel] = []
-  private var friends: [FriendViewModel] = []
+  private var contacts = Contacts()
   
   private var isColleagues: Bool = true {
     willSet(colleagues) {
@@ -109,18 +108,7 @@ class ContactsViewController: UIViewController {
   // MARK: - Load Methods
   
   func load() {
-    loadDefaultColleagues()
-    loadDefaultFriends()
-    
     isColleagues = true // colleaguesButtonTapped()
-  }
-  
-  func loadDefaultColleagues() {
-    colleagues = ColleagueViewModel.defaultColleagues()
-  }
-  
-  func loadDefaultFriends() {
-    friends = FriendViewModel.defaultFriends()
   }
   
   // MARK: - Actions
@@ -162,9 +150,9 @@ extension ContactsViewController: UITableViewDelegate {
     vc.role = .edit
     
     if isColleagues {
-      vc.contactViewModel = ContactViewModel(contact: .colleague(colleagues[indexPath.row]))
+      vc.contactViewModel = ContactViewModel(contact: .colleague(contacts.colleagues[indexPath.row]))
     } else {
-      vc.contactViewModel = ContactViewModel(contact: .friend(friends[indexPath.row]))
+      vc.contactViewModel = ContactViewModel(contact: .friend(contacts.friends[indexPath.row]))
     }
     vc.idx = indexPath.row
     
@@ -178,16 +166,16 @@ extension ContactsViewController: UITableViewDelegate {
 extension ContactsViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return isColleagues ? colleagues.count : friends.count
+    return isColleagues ? contacts.colleagues.count : contacts.friends.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: ContactCell.reuseIdentifier) as! ContactCell
     
     if isColleagues {
-      colleagues[indexPath.row].configure(cell)
+      contacts.colleagues[indexPath.row].configure(cell)
     } else {
-      friends[indexPath.row].configure(cell)
+      contacts.friends[indexPath.row].configure(cell)
     }
     
     return cell
@@ -200,13 +188,31 @@ extension ContactsViewController: UITableViewDataSource {
 extension ContactsViewController {
   
   func updateContact(_ contactViewModel: ContactViewModel, in idx: Int) {
+    
+    // update in storage
+    contacts.update(contactViewModel.contact)
+    
     switch contactViewModel.contact {
     case .colleague(let colleague):
-      guard let colleague = colleague else { return }
-      colleagues[idx] = colleague
+      guard var colleague = colleague else { return }
+      
+      // update in storage must be first
+      let phone = Format.shared.clear(phone: colleague.phone)
+      if colleague.key != phone {
+        colleague.key = phone
+      }
+      
+      contacts.colleagues[idx] = colleague      
     case .friend(let friend):
-      guard let friend = friend else { return }
-      friends[idx] = friend
+      guard var friend = friend else { return }
+      
+      // update in storage must be first
+      let phone = Format.shared.clear(phone: friend.phone)
+      if friend.key != phone {
+        friend.key = phone
+      }
+      
+      contacts.friends[idx] = friend
     }
     
     tableView.reloadData()
@@ -216,13 +222,16 @@ extension ContactsViewController {
     switch contactViewModel.contact {
     case .colleague(let colleague):
       guard let colleague = colleague else { return }
-      colleagues.append(colleague)
-      colleagues.sort(by: <)
+      contacts.colleagues.append(colleague)
+      contacts.colleagues.sort(by: <)
     case .friend(let friend):
       guard let friend = friend else { return }
-      friends.append(friend)
-      friends.sort(by: <)
+      contacts.friends.append(friend)
+      contacts.friends.sort(by: <)
     }
+    
+    // write to storage
+    contacts.add(contactViewModel.contact)
     
     tableView.reloadData()
   }

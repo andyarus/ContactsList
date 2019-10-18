@@ -14,6 +14,17 @@ struct ContactViewModel {
   init(contact: Contact) {
     self.contact = contact
   }
+  
+  // phone uniqueness check
+  func exists(with phone: String) -> Entity? {
+    switch contact {
+    case .colleague:
+      return DatabaseService.shared.retrieveData(by: Format.shared.clear(phone: phone), one: .colleague(nil))
+    case .friend:
+      return DatabaseService.shared.retrieveData(by: Format.shared.clear(phone: phone), one: .friend(nil))
+    }
+  }
+
 }
 
 extension ContactViewModel {

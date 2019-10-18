@@ -9,8 +9,8 @@
 import Foundation
 
 enum Entity {
-  case colleague(Colleague)
-  case friend(Friend)
+  case colleague(Colleague?)
+  case friend(Friend?)
   
   func name() -> String {
     switch self {

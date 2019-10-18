@@ -476,14 +476,27 @@ class ContactViewController: UIViewController {
     }
     
     guard let vc = navigationController?.viewControllers.first as? ContactsViewController,
-      let contact = contactViewModel?.contact else {
+      let contactViewModel = contactViewModel else {
         Alert.shared.error(in: self, message: "Что-то пошло не так")
         return
     }
     
+    // storage key
+    guard let key = key(for: contactViewModel.contact, or: phone) else {
+      Alert.shared.error(in: self, message: "Что-то пошло не так")
+      return
+    }
+    
     let updatedContact: Contact
-    switch contact {
+    switch contactViewModel.contact {
     case .colleague:
+      // colleague phone uniqueness check; check only if the phone is changed
+      if Format.shared.clear(phone: phone) != key,
+        let _ = contactViewModel.exists(with: phone) {
+        Alert.shared.error(in: self, message: "Контакт (коллега) с таким номером уже существует!")
+        return
+      }
+      
       guard let workPhone = workPhoneTextField.text?.trimmingCharacters(in: .whitespaces), !workPhone.isEmpty else {
         Alert.shared.error(in: self, message: "Рабочий телефон не может быть пустой!")
         return
@@ -508,10 +521,18 @@ class ContactViewController: UIViewController {
                                 photo: photo,
                                 phone: phone,
                                 workPhone: workPhone,
-                                position: position)
+                                position: position,
+                                key: key)
       
       updatedContact = .colleague(ColleagueViewModel(colleague: colleague))
     case .friend:
+      // friend phone uniqueness check; check only if the phone is changed
+      if Format.shared.clear(phone: phone) != key,
+        let _ = contactViewModel.exists(with: phone) {
+        Alert.shared.error(in: self, message: "Контакт (друг) с таким номером уже существует!")
+        return
+      }
+      
       guard let birthdayString = birthdayTextField.text?.trimmingCharacters(in: .whitespaces), let birthday = Format.shared.format(toDate: birthdayString) else {
         Alert.shared.error(in: self, message: "Неверный формат даты рождения! Формат должен быть таким:\(Format.shared.format(toString: Date())) (день.месяц.год)")
         return
@@ -526,7 +547,8 @@ class ContactViewController: UIViewController {
                           middleName: middleName,
                           photo: photo,
                           phone: phone,
-                          birthday: birthday)
+                          birthday: birthday,
+                          key: key)
       
       updatedContact = .friend(FriendViewModel(friend: friend))
     }
@@ -641,4 +663,28 @@ extension ContactViewController: UINavigationControllerDelegate, UIImagePickerCo
     picker.dismiss(animated: true)
   }
   
+}
+
+// MARK: - Helpers
+
+extension ContactViewController {
+  
+  // storage key
+  func key(for contact: Contact, or phone: String) -> String? {
+    guard let role = role else { return nil }
+    switch role {
+    case .edit:
+      switch contact {
+      case .colleague(let colleague):
+        guard let colleague = colleague else { return nil }
+        return colleague.key
+      case .friend(let friend):
+        guard let friend = friend else { return nil }
+        return friend.key
+      }
+    case .add:
+      return phone
+    }
+  }
+
 }

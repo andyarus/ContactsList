@@ -12,8 +12,7 @@ class Validator {
   
   static let shared = Validator()
   
-  private init() {
-  }
+  private init() { }
   
   func isValid(name: String) -> Bool {
     return name.range(of: "^[a-zA-Zа-яА-Я]{1,50}$", options: .regularExpression) != nil

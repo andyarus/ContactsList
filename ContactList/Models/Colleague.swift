@@ -16,5 +16,6 @@ struct Colleague {
   let photo: UIImage?
   let phone: String  
   let workPhone: String
-  let position: String  
+  let position: String
+  var key: String
 }

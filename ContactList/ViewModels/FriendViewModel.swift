@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 struct FriendViewModel {
-  private let friend: Friend
+  private(set) var friend: Friend
   
   init(friend: Friend) {
     self.friend = friend
@@ -40,6 +40,49 @@ struct FriendViewModel {
     return Format.shared.format(toString: friend.birthday)
   }
   
+  var key: String {
+    get {
+      return friend.key
+    }
+    set {
+      friend.key = newValue
+    }
+  }
+  
+  static func friends() -> [FriendViewModel] {
+    var friends = [FriendViewModel]()
+    
+    //DatabaseService.shared.deleteData(all: .friend(nil))
+    
+    let entities = DatabaseService.shared.retrieveData(all: .friend(nil))
+    for entity in entities {
+      switch entity {
+      case .friend(let data):
+        guard let data = data else { continue }
+        
+        let friend = Friend(firstName: data.firstName,
+                                  lastName: data.lastName,
+                                  middleName: data.middleName,
+                                  photo: data.photo,
+                                  phone: data.phone,
+                                  birthday: data.birthday,
+                                  key: data.phone)
+        
+        friends.append(FriendViewModel(friend: friend))
+      default:
+        break
+      }
+    }
+    
+    if friends.isEmpty {
+      friends = defaultFriends()
+    }
+
+    friends.sort(by: <)
+    
+    return friends
+  }
+  
   static func defaultFriends() -> [FriendViewModel] {
     var friends = [FriendViewModel]()
     
@@ -60,14 +103,16 @@ struct FriendViewModel {
       let friend = Friend(firstName: firstName,
                              lastName: lastName,
                              middleName: middleName,
-                             photo: UIImage(named: photoName),
+                             photo: !photoName.isEmpty ? UIImage(named: photoName) : nil,
                              phone: phone,
-                             birthday: birthday)
+                             birthday: birthday,
+                             key: phone)
       
       friends.append(FriendViewModel(friend: friend))
+      
+      // write to storage
+      DatabaseService.shared.createData(for: .friend(friend))
     }
-    
-    friends.sort(by: <)
     
     return friends
   }

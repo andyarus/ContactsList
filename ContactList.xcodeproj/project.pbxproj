@@ -34,6 +34,8 @@
 		927131922353C63200844DBD /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131912353C63200844DBD /* UIColor+Extensions.swift */; };
 		927131942353CD8A00844DBD /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131932353CD8A00844DBD /* TextField.swift */; };
 		927131962353E03C00844DBD /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 927131952353E03C00844DBD /* Alert.swift */; };
+		92D4811D2358F83D0085C913 /* DatabaseServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D4811C2358F83D0085C913 /* DatabaseServiceProtocol.swift */; };
+		92D48121235925000085C913 /* Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D48120235925000085C913 /* Contacts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,8 @@
 		927131912353C63200844DBD /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		927131932353CD8A00844DBD /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		927131952353E03C00844DBD /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		92D4811C2358F83D0085C913 /* DatabaseServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseServiceProtocol.swift; sourceTree = "<group>"; };
+		92D48120235925000085C913 /* Contacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contacts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +153,7 @@
 				9262057F23524F2400426537 /* Data Models */,
 				927131902353C5F700844DBD /* Extensions */,
 				9262057B23524EC700426537 /* Models */,
+				92D4811B2358F8260085C913 /* Protocols */,
 				9262057A23524EBA00426537 /* Resources */,
 				926133CE2357C3BC008BEC57 /* Services */,
 				9271317E2353595C00844DBD /* Storyboards */,
@@ -209,12 +214,13 @@
 		9262057B23524EC700426537 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9262058023524FD600426537 /* Colleague.swift */,
-				926205822352516900426537 /* Friend.swift */,
-				9271318A2353BEB800844DBD /* Contact.swift */,
-				926133C623578FF8008BEC57 /* ControllerRole.swift */,
 				926133CC2357B4D1008BEC57 /* AlertChangePhoto.swift */,
+				9262058023524FD600426537 /* Colleague.swift */,
+				9271318A2353BEB800844DBD /* Contact.swift */,
+				92D48120235925000085C913 /* Contacts.swift */,
+				926133C623578FF8008BEC57 /* ControllerRole.swift */,
 				926133D12357CA75008BEC57 /* Entity.swift */,
+				926205822352516900426537 /* Friend.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -271,6 +277,14 @@
 				926133C82357A7F1008BEC57 /* UIImage+Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		92D4811B2358F8260085C913 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				92D4811C2358F83D0085C913 /* DatabaseServiceProtocol.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -413,6 +427,7 @@
 				927131962353E03C00844DBD /* Alert.swift in Sources */,
 				9262058723525B1C00426537 /* FriendViewModel.swift in Sources */,
 				9262058523525B0E00426537 /* ColleagueViewModel.swift in Sources */,
+				92D48121235925000085C913 /* Contacts.swift in Sources */,
 				926205832352516900426537 /* Friend.swift in Sources */,
 				926133CD2357B4D1008BEC57 /* AlertChangePhoto.swift in Sources */,
 				9271318B2353BEB800844DBD /* Contact.swift in Sources */,
@@ -425,6 +440,7 @@
 				926133D22357CA75008BEC57 /* Entity.swift in Sources */,
 				926133C92357A7F1008BEC57 /* UIImage+Extensions.swift in Sources */,
 				927131922353C63200844DBD /* UIColor+Extensions.swift in Sources */,
+				92D4811D2358F83D0085C913 /* DatabaseServiceProtocol.swift in Sources */,
 				9271318F2353BF8900844DBD /* ContactViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

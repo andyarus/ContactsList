@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 struct ColleagueViewModel {
-  private let colleague: Colleague
+  private(set) var colleague: Colleague
   
   init(colleague: Colleague) {
     self.colleague = colleague
@@ -44,6 +44,50 @@ struct ColleagueViewModel {
     return colleague.position
   }
   
+  var key: String {
+    get {
+      return colleague.key
+    }
+    set {
+      colleague.key = newValue
+    }
+  }
+  
+  static func colleagues() -> [ColleagueViewModel] {
+    var colleagues = [ColleagueViewModel]()
+    
+    //DatabaseService.shared.deleteData(all: .colleague(nil))
+    
+    let entities = DatabaseService.shared.retrieveData(all: .colleague(nil))
+    for entity in entities {
+      switch entity {
+      case .colleague(let data):
+        guard let data = data else { continue }
+
+        let colleague = Colleague(firstName: data.firstName,
+                                  lastName: data.lastName,
+                                  middleName: data.middleName,
+                                  photo: data.photo,
+                                  phone: data.phone,
+                                  workPhone: data.workPhone,
+                                  position: data.position,
+                                  key: data.phone)
+
+        colleagues.append(ColleagueViewModel(colleague: colleague))
+      default:
+        break
+      }
+    }
+    
+    if colleagues.isEmpty {
+      colleagues = defaultColleagues()
+    }
+
+    colleagues.sort(by: <)
+    
+    return colleagues
+  }
+  
   static func defaultColleagues() -> [ColleagueViewModel] {
     var colleagues = [ColleagueViewModel]()
     
@@ -51,6 +95,7 @@ struct ColleagueViewModel {
       let dictionaries = NSArray(contentsOf: URL) as? [[String: String]] else {
         return colleagues
     }
+
     for dictionary in dictionaries {
       guard let firstName = dictionary["FirstName"],
         let lastName = dictionary["LastName"],
@@ -65,15 +110,17 @@ struct ColleagueViewModel {
       let colleague = Colleague(firstName: firstName,
                                 lastName: lastName,
                                 middleName: middleName,
-                                photo: UIImage(named: photoName),
+                                photo: !photoName.isEmpty ? UIImage(named: photoName) : nil,
                                 phone: phone,
                                 workPhone: workPhone,
-                                position: position)
+                                position: position,
+                                key: phone)
       
       colleagues.append(ColleagueViewModel(colleague: colleague))
+      
+      // write to storage
+      DatabaseService.shared.createData(for: .colleague(colleague))
     }
-    
-    colleagues.sort(by: <)
     
     return colleagues
   }
