@@ -394,6 +394,8 @@ class ContactViewController: UIViewController {
   
   func setupImagePickerController() {
     //imagePicker.modalPresentationStyle = .fullScreen // in ios 13 default presentation is page sheet
+    imagePicker.popoverPresentationController?.sourceView = view // if not set it will crash on iPad
+    
     imagePicker.delegate = self
     imagePicker.sourceType = .photoLibrary
   }
@@ -413,7 +415,7 @@ class ContactViewController: UIViewController {
           self.changePhotoButton.setTitle("Добавить фото", for: .normal)
         }
       }
-      
+
       return
     }
     

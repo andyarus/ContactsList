@@ -197,7 +197,7 @@ class DatabaseService: DatabaseServiceProtocol {
         managedObject.setValue(colleague.phone, forKeyPath: "phone")
         managedObject.setValue(colleague.workPhone, forKeyPath: "workPhone")
         managedObject.setValue(colleague.position, forKeyPath: "position")
-        let photo = colleague.photo?.jpegData(compressionQuality: 1.0)
+        let photo = colleague.photo != .defaultPhoto ? colleague.photo?.jpegData(compressionQuality: 1.0) : nil
         managedObject.setValue(photo, forKeyPath: "photo")
       case .friend(let friend):
         guard let friend = friend else { return }
@@ -205,8 +205,8 @@ class DatabaseService: DatabaseServiceProtocol {
         managedObject.setValue(friend.lastName, forKeyPath: "lastName")
         managedObject.setValue(friend.middleName, forKeyPath: "middleName")
         managedObject.setValue(friend.phone, forKeyPath: "phone")
-        managedObject.setValue(friend.birthday, forKeyPath: "birthday")
-        let photo = friend.photo?.jpegData(compressionQuality: 1.0)
+        managedObject.setValue(friend.birthday, forKeyPath: "birthday")        
+        let photo = friend.photo != .defaultPhoto ? friend.photo?.jpegData(compressionQuality: 1.0) : nil
         managedObject.setValue(photo, forKeyPath: "photo")
       }
       

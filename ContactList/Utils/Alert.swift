@@ -29,8 +29,15 @@ class Alert {
     view.present(alert, animated: true, completion: nil)
   }
   
-  func changePhoto(in view: UIViewController, message: String? = nil, title: String? = nil, completion: @escaping (AlertChangePhoto) -> Void) {
+  func changePhoto(in vc: UIViewController, message: String? = nil, title: String? = nil, completion: @escaping (AlertChangePhoto) -> Void) {
     let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    
+    alertController.popoverPresentationController?.sourceView = vc.view  // if not set it will crash on iPad
+    if UIDevice.isIPad {
+      alertController.popoverPresentationController?.sourceRect = CGRect(x: vc.view.bounds.midX, y: vc.view.bounds.maxY - 100, width: 0, height: 0)
+      alertController.popoverPresentationController?.permittedArrowDirections = []
+    }    
+    
     let changeAction = UIAlertAction(title: "Изменить", style: .default) { _ in
       completion(.change)
     }
@@ -43,7 +50,7 @@ class Alert {
     alertController.addAction(deleteAction)
     alertController.addAction(cancelAction)
     
-    view.present(alertController, animated: true, completion: nil)
+    vc.present(alertController, animated: true, completion: nil)
   }
   
 }
